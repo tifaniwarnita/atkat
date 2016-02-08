@@ -18,33 +18,43 @@
                controller  : 'penyuplaiController'
            });
    }]);
- atkatApp.controller('atkController', function($scope) {
-   $scope.atk = [
-     {'id': 1,
-       'jenis': 'Kertas',
-     'nama': 'Sinar Dunia A4',
-     'stok': 5,
-     'satuan': 'rim'
-   },
-      {'id': 2,
-        'jenis': 'Bolpoin',
-       'nama': 'Boxy',
-       'stok': 10,
-       'satuan': 'pcs'
-      },
-    ];
+
+ atkatApp.controller('atkController', ['$scope', 'dbService','$q', function($scope,dbService,$q) {
+    getAllATK();
+    function getAllATK() {
+     dbService.getATK().then(function (response) {
+       $scope.atk = response;
+     });
+    }
     $scope.predicate = 'id';
     $scope.reverse = false;
     $scope.order = function(predicate) {
-    $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-    $scope.predicate = predicate;
-};
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+      $scope.predicate = predicate;
+    };
+
+    $scope.createATK = function (newatk) {
+      dbService.insertATK(newatk).then(function (response) {
+        alert("Data ATK baru berhasil ditambahkan");
+        getAllATK();
+      });
+    }
+
+    $scope.deleteATK = function (id) {
+      var r = confirm("Apakah Anda yakin ingin menghapus data ini?");
+      if (r) {
+        dbService.deleteATK(id).then(function (response) {
+          getAllATK();
+        });
+      }
+    }
 
     // add active to menu
     $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
     $('#sidebar-menu a[href="#atk"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
 
- });
+ }]);
+
  atkatApp.controller('pemakaiController', function($scope) {
     $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
     $('#sidebar-menu a[href="#pemakai"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
