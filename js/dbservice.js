@@ -24,7 +24,8 @@
             getPemakai: getPemakai,
             insertPemakai: insertPemakai,
             getPenyuplai: getPenyuplai,
-            insertPenyuplai: insertPenyuplai
+            insertPenyuplai: insertPenyuplai,
+            getPemakaian: getPemakaian
         };
 
         function getATK() {
@@ -116,5 +117,15 @@
           });
           return deferred.promise;
         }
-     }
+
+        function getPemakaian() {
+          var deferred = $q.defer();
+          var query = "SELECT t_trans_pemakaian.id, tanggal, pemakai, jenis, nama, jumlah, satuan FROM t_trans_pemakaian INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pemakaian.atk";
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+    }
 })();

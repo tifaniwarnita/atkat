@@ -16,6 +16,10 @@
            .when('/penyuplai', {
                templateUrl : 'penyuplai.html',
                controller  : 'penyuplaiController'
+           })
+           .when('/pemakaian', {
+               templateUrl : 'pemakaian.html',
+               controller  : 'pemakaianController'
            });
    }]);
 
@@ -120,4 +124,31 @@
     // add active to menu
     $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
     $('#sidebar-menu a[href="#penyuplai"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
+ }]);
+
+atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
+    getAllPemakaian();
+    function getAllPemakaian() {
+     dbService.getPemakaian().then(function (response) {
+       $scope.pemakaian = response;
+     });
+    }
+
+    $scope.predicate = 'id';
+    $scope.reverse = false;
+    $scope.order = function(predicate) {
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+      $scope.predicate = predicate;
+    };
+
+    $scope.createPemakaian = function (newpemakaian) {
+      dbService.insertPemakaian(newpemakaian).then(function (response) {
+        alert("Data pemakaian baru berhasil ditambahkan");
+        getAllPemakaian();
+      });
+    }
+
+    // add active to menu
+    $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
+    $('#sidebar-menu a[href="#pemakaian"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
  }]);

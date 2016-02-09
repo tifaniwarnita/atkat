@@ -1,0 +1,116 @@
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Daftar Pemakaian</h3>
+            </div>
+            <div class="title_right">
+                <button class="btn btn-default pull-right" data-toggle="modal" data-target="#tambahPemakaian">+ Tambah Pemakaian</button>
+            </div>
+        </div>
+    </div>
+
+    
+        <div class="clearfix"></div>
+        <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Cari pemakaian..." ng-model="query">
+              <span class="input-group-btn">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+              </span>
+            </div>
+          </div>
+      <!--
+        <div class="x_title">
+            <h2>Hover rows <small>Try hovering over the rows</small></h2>
+            <ul class="nav navbar-right panel_toolbox">
+                <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                </li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false"><i class="fa fa-wrench"></i></a>
+                    <ul class="dropdown-menu" role="menu">
+                        <li><a href="#">Settings 1</a>
+                        </li>
+                        <li><a href="#">Settings 2</a>
+                        </li>
+                    </ul>
+                </li>
+                <li><a class="close-link"><i class="fa fa-close"></i></a>
+                </li>
+            </ul>
+            <div class="clearfix"></div>
+        </div>
+      -->
+    <div class="x_content">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><a ng-click="order('tanggal')">Tanggal</a><span class="sortorder" ng-show="predicate === 'tanggal'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('pemakai')">Pemakai</a><span class="sortorder" ng-show="predicate === 'pemakai'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('jenis')">Jenis</a><span class="sortorder" ng-show="predicate === 'jenis'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('nama')">Nama</a><span class="sortorder" ng-show="predicate === 'nama'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('jumlah')">Jumlah</a><span class="sortorder" ng-show="predicate === 'jumlah'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('satuan')">Satuan</a><span class="sortorder" ng-show="predicate === 'satuan'" ng-class="{reverse:reverse}"></th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in pemakaian | filter:query | orderBy:predicate:reverse">
+                    <td>{{x.tanggal}}</td>
+                    <td>{{x.pemakai}}</td>
+                    <td>{{x.jenis}}</td>
+                    <td>{{x.nama}}</td>
+                    <td>{{x.jumlah}}</td>
+                    <td>{{x.satuan}}</td>
+                    <td><a href="#" data-toggle="tooltip" title="Ubah data"><i class="fa fa-edit aksi"></i></a> | <a href="#" data-toggle="tooltip" title="Hapus pemakaian"><i class="fa fa-trash aksi"></i></a></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+  </div>
+</div>
+</div>
+<!-- Modal Tambah Pemakaian -->
+    <div class="modal fade" id="tambahPemakaian" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4>Tambah Pemakaian Baru</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" name="newPemakaianForm">
+              <div class="form-group">
+                <label for="jenis-barang">Jenis Barang</label>
+                <input type="text" class="form-control" id="jenis-barang" ng-model="newatk.jenis" required>
+              </div>
+              <div class="form-group">
+                <label for="nama-barang">Nama Barang</label>
+                <input type="text" class="form-control" id="nama-barang" ng-model="newatk.nama" required>
+              </div>
+              <div class="form-group">
+                <label for="stok-barang">Stok Barang</label>
+                <input type="number" min="0" class="form-control" id="stok-barang" ng-model="newatk.stok" required>
+              </div>
+              <div class="form-group">
+                <label for="satuan-barang">Satuan Barang</label>
+                <input type="text" class="form-control" id="satuan-barang" ng-model="newatk.satuan" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
+            <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="newATKForm.$invalid" ng-click="createATK(newatk)"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
+          </div>
+        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+</div>
+</div>
