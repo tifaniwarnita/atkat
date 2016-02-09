@@ -54,7 +54,7 @@
     $('#sidebar-menu a[href="#atk"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
 
  }]);
- 
+
  atkatApp.controller('pemakaiController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
     getAllPemakai();
     function getAllPemakai() {
@@ -80,4 +80,31 @@
     // add active to menu
     $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
     $('#sidebar-menu a[href="#pemakai"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
+ }]);
+
+  atkatApp.controller('penyuplaiController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
+    getAllPenyuplai();
+    function getAllPenyuplai() {
+     dbService.getPenyuplai().then(function (response) {
+       $scope.penyuplai = response;
+     });
+    }
+
+    $scope.predicate = 'id';
+    $scope.reverse = false;
+    $scope.order = function(predicate) {
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+      $scope.predicate = predicate;
+    };
+
+    $scope.createPenyuplai = function (newpenyuplai) {
+      dbService.insertPenyuplai(newpenyuplai).then(function (response) {
+        alert("Data penyuplai baru berhasil ditambahkan");
+        getAllPenyuplai();
+      });
+    }
+
+    // add active to menu
+    $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
+    $('#sidebar-menu a[href="#penyuplai"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
  }]);

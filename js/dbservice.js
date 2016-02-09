@@ -20,7 +20,9 @@
             insertATK: insertATK,
             deleteATK: deleteATK,
             getPemakai: getPemakai,
-            insertPemakai: insertPemakai
+            insertPemakai: insertPemakai,
+            getPenyuplai: getPenyuplai,
+            insertPenyuplai: insertPenyuplai
         };
 
         function getATK() {
@@ -67,6 +69,26 @@
           var deferred = $q.defer();
           var query = "INSERT INTO t_master_pemakai SET ?";
           connection.query(query, newpemakai, function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res.insertId);
+          });
+          return deferred.promise;
+        }
+
+        function getPenyuplai() {
+          var deferred = $q.defer();
+          var query = "SELECT * FROM t_master_penyuplai";
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function insertPenyuplai(newpenyuplai) {
+          var deferred = $q.defer();
+          var query = "INSERT INTO t_master_penyuplai SET ?";
+          connection.query(query, newpenyuplai, function (err, res) {
               if (err) deferred.reject(err);
               deferred.resolve(res.insertId);
           });

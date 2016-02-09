@@ -1,0 +1,85 @@
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Daftar Penyuplai</h3>
+            </div>
+            <div class="title_right">
+                <button class="btn btn-default pull-right" data-toggle="modal" data-target="#tambahPenyuplai">+ Tambah Penyuplai Baru</button>
+            </div>
+        </div>
+
+    <div class="modal fade" id="tambahPenyuplai" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4>Tambah Penyuplai Baru</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" name="newPenyuplaiForm">
+              <div class="form-group">
+                <label for="jenis-barang">Nama Penyuplai</label>
+                <input type="text" class="form-control" id="nama-penyuplai" ng-model="newpenyuplai.nama" required>
+              </div>
+              <div class="form-group">
+                <label for="jenis-barang">Kontak Penyuplai</label>
+                <input type="text" class="form-control" id="kontak-penyuplai" ng-model="newpenyuplai.kontak" required>
+              </div>
+              <div class="form-group">
+                <label for="jenis-barang">Alamat Penyuplai</label>
+                <input type="text" class="form-control" id="alamat-penyuplai" ng-model="newpenyuplai.alamat" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
+            <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="newPenyuplaiForm.$invalid" ng-click="createPenyuplai(newpenyuplai)"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
+          </div>
+        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+        <div class="clearfix"></div>
+        <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Cari penyuplai..." ng-model="query">
+              <span class="input-group-btn">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+              </span>
+            </div>
+          </div>
+
+    <div class="x_content">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><a ng-click="order('id')">ID</a><span class="sortorder" ng-show="predicate === 'id'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('nama')">Nama</a><span class="sortorder" ng-show="predicate === 'nama'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('kontak')">Kontak</a><span class="sortorder" ng-show="predicate === 'kontak'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('alamat')">Alamat</a><span class="sortorder" ng-show="predicate === 'alamat'" ng-class="{reverse:reverse}"></th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in penyuplai | filter:query | orderBy:predicate:reverse">
+                    <th scope="row">{{x.id}}</th>
+                    <td>{{x.nama}}</td>
+                    <td>{{x.kontak}}</td>
+                    <td>{{x.alamat}}</td>
+                    <td><a href="#" data-toggle="tooltip" title="Ubah data"><i class="fa fa-edit aksi"></i></a> | <a href="#" data-toggle="tooltip" title="Hapus barang" ng-click="deletePenyuplai({{x.id}})"><i class="fa fa-trash aksi"></i></a> | <a href="#" data-toggle="tooltip" title="Tambah transaksi pemakaian"><i class="fa fa-hand-paper-o aksi"></i></a> | <a href="#" data-toggle="tooltip" title="Tambah transaksi booking"><i class="fa fa-calendar aksi"></i></a> | <a href="#" data-toggle="tooltip" title="Tambah transaksi pengadaan"><i class="fa fa-shopping-cart"></i></a></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
