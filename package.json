@@ -1,0 +1,12 @@
+{
+  "name": "ATKat",
+  "version": "1.0.0",
+  "description": "Aplikasi pengelolaan ATK Sarpras Labtek V",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron main.js"
+  },
+  "dependencies": {
+    "mysql": "^2.10.2"
+  }
+}

@@ -29,7 +29,7 @@ CREATE TABLE `t_master_atk` (
   `stok` int(10) NOT NULL DEFAULT '0',
   `satuan` varchar(255) NOT NULL DEFAULT 'Buah',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,6 +38,7 @@ CREATE TABLE `t_master_atk` (
 
 LOCK TABLES `t_master_atk` WRITE;
 /*!40000 ALTER TABLE `t_master_atk` DISABLE KEYS */;
+INSERT INTO `t_master_atk` VALUES (1,'Boxy','Penghapus',50,'pak'),(2,'Pentel','Penghapus',50,'pak'),(3,'Snowman Boardmarker','Spidol',20,'pak'),(4,'Snowman Permanent','Spidol',15,'pak'),(5,'Sinar Dunia','Kertas',10,'rim');
 /*!40000 ALTER TABLE `t_master_atk` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -62,6 +63,7 @@ CREATE TABLE `t_master_pemakai` (
 
 LOCK TABLES `t_master_pemakai` WRITE;
 /*!40000 ALTER TABLE `t_master_pemakai` DISABLE KEYS */;
+INSERT INTO `t_master_pemakai` VALUES ('13513025','Venny Larasati A.','Mahasiswa'),('13513055','Tifani Warnita','Mahasiswa'),('13513069','Jessica Handayani','Mahasiswa'),('13513079','Asanilta Fahda','Mahasiswa'),('13514601','M. Azwar Adli','Mahasiswa');
 /*!40000 ALTER TABLE `t_master_pemakai` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -191,4 +193,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-02-02 10:31:10
+-- Dump completed on 2016-02-09 10:28:18
