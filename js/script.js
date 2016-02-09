@@ -54,7 +54,7 @@
     $('#sidebar-menu a[href="#atk"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
 
  }]);
-
+ 
  atkatApp.controller('pemakaiController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
     getAllPemakai();
     function getAllPemakai() {
