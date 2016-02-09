@@ -17,8 +17,10 @@
 
         return {
             getATK: getATK,
+            getATKByID: getATKByID,
             insertATK: insertATK,
             deleteATK: deleteATK,
+            editATK: editATK,
             getPemakai: getPemakai,
             insertPemakai: insertPemakai,
             getPenyuplai: getPenyuplai,
@@ -31,6 +33,16 @@
           connection.query(query, function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function getATKByID(id) {
+          var deferred = $q.defer();
+          var query = "SELECT * FROM t_master_atk WHERE id = ?";
+          connection.query(query, [id], function (err, rows) {
+              if (err) deferred.reject(err);
+              deferred.resolve(rows);
           });
           return deferred.promise;
         }
@@ -53,6 +65,16 @@
               deferred.resolve(res.affectedRows);
           });
           return deferred.promise;
+        }
+
+        function editATK(editatk) {
+          var deferred = $q.defer();
+           var query = "UPDATE t_master_atk SET jenis = ?, nama=?, stok=?, satuan=? WHERE id = ?";
+           connection.query(query, [editatk.jenis, editatk.nama, editatk.stok, editatk.satuan, editatk.id], function (err, res) {
+               if (err) deferred.reject(err);
+               deferred.resolve(res);
+           });
+           return deferred.promise;
         }
 
         function getPemakai() {

@@ -26,18 +26,31 @@
        $scope.atk = response;
      });
     }
-    $scope.predicate = 'id';
+    $scope.predicate = 'jenis';
     $scope.reverse = false;
     $scope.order = function(predicate) {
       $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
       $scope.predicate = predicate;
     };
 
+    $scope.getATKByID = function (id) {
+      dbService.getATKByID(id).then(function (response) {
+        $scope.editatk = response[0];
+      });
+    }
+
     $scope.createATK = function (newatk) {
       dbService.insertATK(newatk).then(function (response) {
         alert("Data ATK baru berhasil ditambahkan");
         getAllATK();
       });
+    }
+
+    $scope.editATK = function() {
+      dbService.editATK($scope.editatk).then(function (response) {
+        alert("Data ATK berhasil diubah");
+        getAllATK();
+      })
     }
 
     $scope.deleteATK = function (id) {
