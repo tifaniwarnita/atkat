@@ -87,11 +87,33 @@
       $scope.predicate = predicate;
     };
 
+    $scope.getPemakaiByID = function (id) {
+      dbService.getPemakaiByID(id).then(function (response) {
+        $scope.editpemakai = response[0];
+      });
+    }
+
     $scope.createPemakai = function (newpemakai) {
       dbService.insertPemakai(newpemakai).then(function (response) {
         alert("Data pemakai baru berhasil ditambahkan");
         getAllPemakai();
       });
+    }
+
+    $scope.editPemakai = function() {
+      dbService.editPemakai($scope.editpemakai).then(function (response) {
+        alert("Data pemakai berhasil diubah");
+        getAllPemakai();
+      })
+    }
+
+    $scope.deletePemakai = function (id) {
+      var r = confirm("Apakah Anda yakin ingin menghapus data ini?");
+      if (r) {
+        dbService.deletePemakai(id).then(function (response) {
+          getAllPemakai();
+        });
+      }
     }
 
     // add active to menu

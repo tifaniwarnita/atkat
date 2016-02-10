@@ -22,7 +22,10 @@
             deleteATK: deleteATK,
             editATK: editATK,
             getPemakai: getPemakai,
+            getPemakaiByID: getPemakaiByID,
             insertPemakai: insertPemakai,
+            editPemakai: editPemakai,
+            deletePemakai: deletePemakai,
             getPenyuplai: getPenyuplai,
             insertPenyuplai: insertPenyuplai,
             getPemakaian: getPemakaian,
@@ -92,6 +95,16 @@
           return deferred.promise;
         }
 
+        function getPemakaiByID(id) {
+          var deferred = $q.defer();
+          var query = "SELECT * FROM t_master_pemakai WHERE id = ?";
+          connection.query(query, [id], function (err, rows) {
+              if (err) deferred.reject(err);
+              deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
         function insertPemakai(newpemakai) {
           var deferred = $q.defer();
           var query = "INSERT INTO t_master_pemakai SET ?";
@@ -100,6 +113,26 @@
               deferred.resolve(res.insertId);
           });
           return deferred.promise;
+        }
+
+        function deletePemakai(id) {
+          var deferred = $q.defer();
+          var query = "DELETE FROM t_master_pemakai WHERE id = ?";
+          connection.query(query, [id], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res.affectedRows);
+          });
+          return deferred.promise;
+        }
+
+        function editPemakai(editpemakai) {
+          var deferred = $q.defer();
+           var query = "UPDATE t_master_pemakai SET id=?, nama=?, jenis=? WHERE id = ?";
+           connection.query(query, [editpemakai.id, editpemakai.nama, editpemakai.jenis, editpemakai.id], function (err, res) {
+               if (err) deferred.reject(err);
+               deferred.resolve(res);
+           });
+           return deferred.promise;
         }
 
         function getPenyuplai() {
