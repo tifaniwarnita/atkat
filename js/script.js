@@ -141,11 +141,33 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
       $scope.predicate = predicate;
     };
 
+    $scope.getPemakaianByID = function (id) {
+      dbService.getPemakaianByID(id).then(function (response) {
+        $scope.editpemakaian = response[0];
+      });
+    }
+
     $scope.createPemakaian = function (newpemakaian) {
       dbService.insertPemakaian(newpemakaian).then(function (response) {
         alert("Data pemakaian baru berhasil ditambahkan");
         getAllPemakaian();
       });
+    }
+
+    $scope.editPemakaian = function() {
+      dbService.editPemakaian($scope.editpemakaian).then(function (response) {
+        alert("Data pemakaian berhasil diubah");
+        getAllPemakaian();
+      })
+    }
+
+    $scope.deletePemakaian = function (id) {
+      var r = confirm("Apakah Anda yakin ingin menghapus data ini?");
+      if (r) {
+        dbService.deletePemakaian(id).then(function (response) {
+          getAllPemakaian();
+        });
+      }
     }
 
     // add active to menu

@@ -26,7 +26,10 @@
             getPenyuplai: getPenyuplai,
             insertPenyuplai: insertPenyuplai,
             getPemakaian: getPemakaian,
-            insertPemakaian: insertPemakaian
+            getPemakaianByID: getPemakaianByID,
+            insertPemakaian: insertPemakaian,
+            editPemakaian: editPemakaian,
+            deletePemakaian: deletePemakaian
         };
 
         function getATK() {
@@ -121,10 +124,20 @@
 
         function getPemakaian() {
           var deferred = $q.defer();
-          var query = "SELECT t_trans_pemakaian.id, tanggal, pemakai, jenis, nama, jumlah, satuan FROM t_trans_pemakaian INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pemakaian.atk";
+          var query = "SELECT t_trans_pemakaian.id AS id, tanggal, pemakai, jenis, nama, jumlah, satuan FROM t_trans_pemakaian INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pemakaian.atk";
           connection.query(query, function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function getPemakaianByID(id) {
+          var deferred = $q.defer();
+          var query = "SELECT t_trans_pemakaian.id as id, tanggal, pemakai, jenis, nama, jumlah, satuan FROM t_trans_pemakaian INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pemakaian.atk WHERE t_trans_pemakaian.id=?";
+          connection.query(query, [id], function (err, rows) {
+              if (err) deferred.reject(err);
+              deferred.resolve(rows);
           });
           return deferred.promise;
         }
@@ -138,5 +151,26 @@
           });
           return deferred.promise;
         }
+
+        function editPemakaian(editpemakaian) {
+          var deferred = $q.defer();
+           var query = "UPDATE t_trans_pemakaian SET pemakai=?, atk=(select id from t_master_atk where jenis=? and nama=? limit 1), jumlah=? WHERE id=?";
+           connection.query(query, [editpemakaian.pemakai, editpemakaian.jenis, editpemakaian.nama, editpemakaian.jumlah, editpemakaian.id], function (err, res) {
+               if (err) deferred.reject(err);
+               deferred.resolve(res);
+           });
+           return deferred.promise;
+        }
+
+        function deletePemakaian(id) {
+          var deferred = $q.defer();
+          var query = "DELETE FROM t_trans_pemakaian WHERE id = ?";
+          connection.query(query, [id], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res.affectedRows);
+          });
+          return deferred.promise;
+        }
+
     }
 })();
