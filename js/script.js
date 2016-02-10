@@ -149,9 +149,13 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
       $scope.predicate = predicate;
     };
 
-    $scope.getPemakaianByID = function (id) {
+    $scope.initEditPemakaian = function (id) {
       dbService.getPemakaianByID(id).then(function (response) {
         $scope.editpemakaian = response[0];
+
+        dbService.getNamaATKByJenis($scope.editpemakaian.jenis).then(function (response) {
+          $scope.namabarang_edit = response;
+        });
       });
     }
 
@@ -166,7 +170,7 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
       dbService.editPemakaian($scope.editpemakaian).then(function (response) {
         alert("Data pemakaian berhasil diubah");
         getAllPemakaian();
-      })
+      });
     }
 
     $scope.deletePemakaian = function (id) {
@@ -181,6 +185,12 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
     $scope.jenisChanged = function() {
       dbService.getNamaATKByJenis($scope.newpemakaian.jenis).then(function (response) {
         $scope.namabarang = response;
+      });
+    }
+
+    $scope.jenisChangedEdit = function() {
+      dbService.getNamaATKByJenis($scope.editpemakaian.jenis).then(function (response) {
+        $scope.namabarang_edit = response;
       });
     }
 

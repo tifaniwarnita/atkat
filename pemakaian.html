@@ -65,7 +65,7 @@
                     <td>{{x.nama}}</td>
                     <td>{{x.jumlah}}</td>
                     <td>{{x.satuan}}</td>
-                    <td><a href="#pemakaian" data-toggle="modal" data-target="#editPemakaian" ng-click="getPemakaianByID(x.id)"><i class="fa fa-edit aksi" data-toggle="tooltip" title="Ubah data"></i></a> | <a href="#pemakaian" ng-click="deletePemakaian(x.id)"><i data-toggle="tooltip" title="Hapus pemakaian" class="fa fa-trash aksi"></i></a></td>
+                    <td><a href="#pemakaian" data-toggle="modal" data-target="#editPemakaian" ng-click="initEditPemakaian(x.id)"><i class="fa fa-edit aksi" data-toggle="tooltip" title="Ubah data"></i></a> | <a href="#pemakaian" ng-click="deletePemakaian(x.id)"><i data-toggle="tooltip" title="Hapus pemakaian" class="fa fa-trash aksi"></i></a></td>
                 </tr>
             </tbody>
         </table>
@@ -88,7 +88,7 @@
             <form role="form" name="newPemakaianForm">
               <div class="form-group">
                 <label for="nim-nip">NIM/NIP</label>
-                <input type="text" class="form-control" id="jenis-barang" ng-model="newpemakaian.pemakai" required>
+                <input type="text" class="form-control" id="id-pemakai" ng-model="newpemakaian.pemakai" required>
               </div>
               <div class="form-group">
                 <label for="jenis-barang">Jenis Barang</label>
@@ -129,15 +129,17 @@
             <form role="form" name="editPemakaianForm">
               <div class="form-group">
                 <label for="nim-nip">NIM/NIP</label>
-                <input type="text" class="form-control" id="jenis-barang" ng-model="editpemakaian.pemakai" required>
+                <input type="text" class="form-control" ng-model="editpemakaian.pemakai" required>
               </div>
               <div class="form-group">
                 <label for="jenis-barang">Jenis Barang</label>
-                <input type="text" class="form-control" id="jenis-barang" ng-model="editpemakaian.jenis" required>
+                <select class="form-control" ng-options="barang.jenis as barang.jenis for barang in jenisbarang" ng-model="editpemakaian.jenis" ng-change="jenisChangedEdit()">
+                </select>
               </div>
               <div class="form-group">
                 <label for="nama-barang">Nama Barang</label>
-                <input type="text" class="form-control" id="nama-barang" ng-model="editpemakaian.nama" required>
+                <select class="form-control" ng-options="barang.nama as barang.nama for barang in namabarang_edit" ng-model="editpemakaian.nama">
+                </select>
               </div>
               <div class="form-group">
                 <label for="jumlah-barang">Jumlah</label>
