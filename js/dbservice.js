@@ -23,6 +23,7 @@
             editATK: editATK,
             getAllJenisATK: getAllJenisATK,
             getNamaATKByJenis: getNamaATKByJenis,
+            changeStokATK: changeStokATK,
             getPemakai: getPemakai,
             getPemakaiByID: getPemakaiByID,
             insertPemakai: insertPemakai,
@@ -34,7 +35,12 @@
             getPemakaianByID: getPemakaianByID,
             insertPemakaian: insertPemakaian,
             editPemakaian: editPemakaian,
-            deletePemakaian: deletePemakaian
+            deletePemakaian: deletePemakaian,
+            getBooking: getBooking,
+            getBookingByID: getBookingByID,
+            insertBooking: insertBooking,
+            deleteBooking: deleteBooking,
+            editBooking: editBooking
         };
 
         function getATK() {
@@ -104,6 +110,16 @@
           connection.query(query, [jenis], function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function changeStokATK(jumlah, jenis, nama) {
+          var deferred = $q.defer();
+          var query = "UPDATE t_master_atk SET stok = stok + ? WHERE jenis = ? AND nama=?";
+          connection.query(query, [jumlah], [jenis], [nama], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res.affectedRows);
           });
           return deferred.promise;
         }
@@ -221,6 +237,56 @@
         function deletePemakaian(id) {
           var deferred = $q.defer();
           var query = "DELETE FROM t_trans_pemakaian WHERE id = ?";
+          connection.query(query, [id], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res.affectedRows);
+          });
+          return deferred.promise;
+        }
+
+        function getBooking() {
+          var deferred = $q.defer();
+          var query = "SELECT t_trans_booking.id AS id, tanggal_pesan, tanggal_pakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk";
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function getBookingByID(id) {
+          var deferred = $q.defer();
+          var query = "SELECT t_trans_booking.id as id, tanggal_pakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk WHERE t_trans_booking.id=?";
+          connection.query(query, [id], function (err, rows) {
+              if (err) deferred.reject(err);
+              deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function insertBooking(newbooking) {
+          var deferred = $q.defer();
+          var query = "INSERT INTO t_trans_booking (tanggal_pesan, tanggal_pakai, pemakai, atk, jumlah) VALUES (now(), ?, ?, (select id from t_master_atk where jenis=? and nama=? limit 1), ?);";
+          connection.query(query, [newbooking.tanggal_pakai, newbooking.pemakai, newbooking.jenis, newbooking.nama, newbooking.jumlah], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res);
+          });
+          return deferred.promise;
+        }
+
+        function editBooking(editbooking) {
+          var deferred = $q.defer();
+           var query = "UPDATE t_trans_booking SET tanggal_pakai=?, pemakai=?, atk=(select id from t_master_atk where jenis=? and nama=? limit 1), jumlah=? WHERE id=?";
+           connection.query(query, [editbooking.tanggal_pakai, editbooking.pemakai, editbooking.jenis, editbooking.nama, editbooking.jumlah, editbooking.id], function (err, res) {
+               if (err) deferred.reject(err);
+               deferred.resolve(res);
+           });
+           return deferred.promise;
+        }
+
+        function deleteBooking(id) {
+          var deferred = $q.defer();
+          var query = "DELETE FROM t_trans_booking WHERE id = ?";
           connection.query(query, [id], function (err, res) {
               if (err) deferred.reject(err);
               deferred.resolve(res.affectedRows);

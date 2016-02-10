@@ -73,18 +73,22 @@
               </div>
               <div class="form-group">
                 <label for="jenis-barang">Jenis Barang</label>
-                <select id="jenis-barang" class="form-control" ng-options="barang.jenis as barang.jenis for barang in jenisbarang" ng-model="newbooking.jenis" ng-change="jenisChanged()">
+                <select id="jenis-barang" class="form-control" ng-options="barang.jenis as barang.jenis for barang in jenisbarang" ng-model="newbooking.jenis" ng-change="jenisChanged()" required>
                 </select>
               </div>
               <div class="form-group">
                 <label for="nama-barang">Nama Barang</label>
-                <select id="nama-barang" class="form-control" ng-options="barang.nama as barang.nama for barang in namabarang" ng-model="newbooking.nama">
+                <select id="nama-barang" class="form-control" ng-options="barang.nama as barang.nama for barang in namabarang" ng-model="newbooking.nama" required>
                 </select>
               </div>
               <div class="form-group">
                 <label for="jumlah-barang">Jumlah</label>
                 <input type="number" min="0" class="form-control" id="jumlah-barang" ng-model="newbooking.jumlah" required>
               </div>
+              <div class="form-group">
+                <label>Tanggal Pakai</label>
+                <input id="tanggal_pakai_picker" class="date-picker form-control" required="required" type="text" ng-model="newbooking.tanggal_pakai">
+            </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
@@ -136,3 +140,14 @@
 
 </div>
 </div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#tanggal_pakai_picker').daterangepicker({
+            singleDatePicker: true,
+            calender_style: "picker_4"
+        }, function (start, end, label) {
+            console.log(start.toISOString(), end.toISOString(), label);
+        });
+    });
+</script>
