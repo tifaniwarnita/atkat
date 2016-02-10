@@ -37,7 +37,7 @@
       $scope.predicate = predicate;
     };
 
-    $scope.getATKByID = function (id) {
+    $scope.initEditATK = function (id) {
       dbService.getATKByID(id).then(function (response) {
         $scope.editatk = response[0];
       });
