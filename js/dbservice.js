@@ -21,6 +21,8 @@
             insertATK: insertATK,
             deleteATK: deleteATK,
             editATK: editATK,
+            getAllJenisATK: getAllJenisATK,
+            getNamaATKByJenis: getNamaATKByJenis,
             getPemakai: getPemakai,
             insertPemakai: insertPemakai,
             getPenyuplai: getPenyuplai,
@@ -80,6 +82,27 @@
                deferred.resolve(res);
            });
            return deferred.promise;
+        }
+
+        function getAllJenisATK() {
+          var deferred = $q.defer();
+          var query = "SELECT DISTINCT jenis FROM t_master_atk";
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+
+        function getNamaATKByJenis(jenis) {
+          var deferred = $q.defer();
+          var query = "SELECT nama FROM t_master_atk WHERE jenis=?";
+          connection.query(query, [jenis], function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
         }
 
         function getPemakai() {

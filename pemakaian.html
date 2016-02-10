@@ -10,7 +10,7 @@
         </div>
     </div>
 
-    
+
         <div class="clearfix"></div>
         <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -92,11 +92,15 @@
               </div>
               <div class="form-group">
                 <label for="jenis-barang">Jenis Barang</label>
-                <input type="text" class="form-control" id="jenis-barang" ng-model="newpemakaian.jenis" required>
+                <select id="jenis-barang" class="form-control" ng-options="barang.jenis as barang.jenis for barang in jenisbarang" ng-model="newpemakaian.jenis" ng-change="jenisChanged()">
+                </select>
+                <!--<input type="text" class="form-control" id="jenis-barang" ng-model="newpemakaian.jenis" required>-->
               </div>
               <div class="form-group">
                 <label for="nama-barang">Nama Barang</label>
-                <input type="text" class="form-control" id="nama-barang" ng-model="newpemakaian.nama" required>
+                <select id="nama-barang" class="form-control" ng-options="barang.nama as barang.nama for barang in namabarang" ng-model="newpemakaian.nama">
+                </select>
+                <!--<input type="text" class="form-control" id="nama-barang" ng-model="newpemakaian.nama" required>-->
               </div>
               <div class="form-group">
                 <label for="jumlah-barang">Jumlah</label>

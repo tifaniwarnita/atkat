@@ -128,10 +128,18 @@
 
 atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
     getAllPemakaian();
+    getAllJenis();
+
     function getAllPemakaian() {
      dbService.getPemakaian().then(function (response) {
        $scope.pemakaian = response;
      });
+    }
+
+    function getAllJenis() {
+    dbService.getAllJenisATK().then(function(response) {
+        $scope.jenisbarang = response;
+      });
     }
 
     $scope.predicate = 'id';
@@ -168,6 +176,12 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
           getAllPemakaian();
         });
       }
+    }
+
+    $scope.jenisChanged = function() {
+      dbService.getNamaATKByJenis($scope.newpemakaian.jenis).then(function (response) {
+        $scope.namabarang = response;
+      });
     }
 
     // add active to menu
