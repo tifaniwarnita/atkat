@@ -25,7 +25,8 @@
             insertPemakai: insertPemakai,
             getPenyuplai: getPenyuplai,
             insertPenyuplai: insertPenyuplai,
-            getPemakaian: getPemakaian
+            getPemakaian: getPemakaian,
+            insertPemakaian: insertPemakaian
         };
 
         function getATK() {
@@ -124,6 +125,16 @@
           connection.query(query, function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function insertPemakaian(newpemakaian) {
+          var deferred = $q.defer();
+          var query = "INSERT INTO t_trans_pemakaian (tanggal, pemakai, atk, jumlah) VALUES (now(), ?, (select id from t_master_atk where jenis=? and nama=? limit 1), ?);";
+          connection.query(query, [newpemakaian.pemakai, newpemakaian.jenis, newpemakaian.nama, newpemakaian.jumlah], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res);
           });
           return deferred.promise;
         }

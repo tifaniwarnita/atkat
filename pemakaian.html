@@ -87,25 +87,25 @@
           <div class="modal-body">
             <form role="form" name="newPemakaianForm">
               <div class="form-group">
+                <label for="nim-nip">NIM/NIP</label>
+                <input type="text" class="form-control" id="jenis-barang" ng-model="newpemakaian.pemakai" required>
+              </div>
+              <div class="form-group">
                 <label for="jenis-barang">Jenis Barang</label>
-                <input type="text" class="form-control" id="jenis-barang" ng-model="newatk.jenis" required>
+                <input type="text" class="form-control" id="jenis-barang" ng-model="newpemakaian.jenis" required>
               </div>
               <div class="form-group">
                 <label for="nama-barang">Nama Barang</label>
-                <input type="text" class="form-control" id="nama-barang" ng-model="newatk.nama" required>
+                <input type="text" class="form-control" id="nama-barang" ng-model="newpemakaian.nama" required>
               </div>
               <div class="form-group">
-                <label for="stok-barang">Stok Barang</label>
-                <input type="number" min="0" class="form-control" id="stok-barang" ng-model="newatk.stok" required>
-              </div>
-              <div class="form-group">
-                <label for="satuan-barang">Satuan Barang</label>
-                <input type="text" class="form-control" id="satuan-barang" ng-model="newatk.satuan" required>
+                <label for="jumlah-barang">Jumlah</label>
+                <input type="number" min="0" class="form-control" id="jumlah-barang" ng-model="newpemakaian.jumlah" required>
               </div>
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
-            <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="newATKForm.$invalid" ng-click="createATK(newatk)"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
+            <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="newPemakaianForm.$invalid" ng-click="createPemakaian(newpemakaian)"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
           </div>
         </form>
           </div>
