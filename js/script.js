@@ -24,6 +24,10 @@
            .when('/booking', {
                templateUrl : 'booking.html',
                controller  : 'bookingController'
+           })
+           .when('/pengadaan', {
+               templateUrl : 'pengadaan.html',
+               controller  : 'pengadaanController'
            });
    }]);
 
@@ -320,4 +324,46 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
     // add active to menu
     $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
     $('#sidebar-menu a[href="#booking"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
+ }]);
+
+atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
+    getAllPengadaan();
+    getAllJenis();
+
+    function getAllPengadaan() {
+     dbService.getPengadaan().then(function (response) {
+       $scope.pengadaan = response;
+     });
+    }
+
+    function getAllJenis() {
+    dbService.getAllJenisATK().then(function(response) {
+        $scope.jenisbarang = response;
+      });
+    }
+
+    $scope.predicate = 'tanggal_pesan';
+    $scope.reverse = true;
+    $scope.order = function(predicate) {
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+      $scope.predicate = predicate;
+    };
+
+
+    $scope.createPengadaan = function (newpengadaan) {
+      dbService.insertPengadaan(newpengadaan).then(function (response) {
+        alert("Data pengadaan berhasil ditambahkan");
+        getAllPengadaan();
+      });
+    }
+
+    $scope.jenisChanged = function() {
+      dbService.getNamaATKByJenis($scope.newpengadaan.jenis).then(function (response) {
+        $scope.namabarang = response;
+      });
+    }
+
+    // add active to menu
+    $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
+    $('#sidebar-menu a[href="#pengadaan"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
  }]);
