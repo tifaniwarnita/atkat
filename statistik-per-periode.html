@@ -1,0 +1,36 @@
+<div class="right_col" role="main">
+  <div class="">
+    <div class="page-title">
+      <div class="title_left">
+        <h3>Statistik ATK per Periode</h3>
+      </div>
+    </div>
+  </div>
+
+  <div class="clearfix">
+  </div>
+  <div class="row">
+    <div class="col-md-12 col-sm-12 col-xs-12">
+      <div class="x_panel">
+
+        <div class="x_content">
+          <form>
+            <label for="periode">Periode Statistik: </label>
+            <select name="periode" ng-model="jenisPeriode">
+              <option value="Per Tahun">Per Tahun</option>
+              <option value="Per Bulan">Per Bulan</option>
+              <option value="Per Hari">Per Hari</option>
+            </select>
+            <noscript><input type="submit" value="Submit"></noscript>
+          </form>
+          <br><br>
+            <div id="container" style="width:100%; height:400px;" config="highchartsNG"></div>
+          <script>
+
+          </script>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
- var atkatApp = angular.module('atkatApp', ['ngRoute']);
+ var atkatApp = angular.module('atkatApp', ['ngRoute', 'highcharts-ng']);
  atkatApp.config(['$routeProvider', function($routeProvider) {
        $routeProvider
            .when('/', {
@@ -24,8 +24,84 @@
            .when('/booking', {
                templateUrl : 'booking.html',
                controller  : 'bookingController'
+           })
+           .when('/statperiode', {
+               templateUrl : 'statistik-per-periode.html',
+               controller  : 'statistikPerPeriodeController'
            });
    }]);
+
+ atkatApp.controller('statistikPerPeriodeController', ['$scope', 'dbService', '$q', function($scope, dbService, $q) {
+   $scope.jenisPeriode = "Per Tahun";
+
+    var Highcharts = require('highcharts/highstock');
+
+    // Load module after Highcharts is loaded
+    require('highcharts/modules/exporting')(Highcharts);
+
+    // Create the chart
+    Highcharts.chart('container', {
+      chart: {
+            events: {
+              load: function() {
+                type: 'line'
+              }
+            }
+        },
+        rangeSelector : {
+          allButtonsEnabled: true,
+          buttons: [{
+              type: 'month',
+              count: 3,
+              text: 'Day',
+              dataGrouping: {
+                  forced: true,
+                  units: [['day', [1]]]
+              }
+          }, {
+              type: 'year',
+              count: 1,
+              text: 'Week',
+              dataGrouping: {
+                  forced: true,
+                  units: [['week', [1]]]
+              }
+          }, {
+              type: 'all',
+              text: 'Month',
+              dataGrouping: {
+                  forced: true,
+                  units: [['month', [1]]]
+              }
+          }],
+          buttonTheme: {
+              width: 60
+          },
+          selected: 2
+        },
+        title: {
+            text: 'Statistik ATK ' + $scope.jenisPeriode
+        },
+        subtitle: {
+          text: 'Data statistik ATK dengan rincian periode kucing kucing'
+        },
+        xAxis: {
+          categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+        },
+        yAxis: {
+          title: {
+            text: 'Penggunaan ATK'
+          }
+        },
+        series: [{
+          name: 'Pensil',
+          data: [1, 0, 4, 5, 6, 8]
+        }, {
+          name: 'Penghapus',
+          data: [5, 7, 3]
+        }]
+    });
+ }]);
 
  atkatApp.controller('atkController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
     getAllATK();
