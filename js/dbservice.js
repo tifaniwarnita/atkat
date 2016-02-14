@@ -30,7 +30,10 @@
             editPemakai: editPemakai,
             deletePemakai: deletePemakai,
             getPenyuplai: getPenyuplai,
+            getPenyuplaiByID: getPenyuplaiByID,
             insertPenyuplai: insertPenyuplai,
+            editPenyuplai: editPenyuplai,
+            deletePenyuplai: deletePenyuplai,
             getPemakaian: getPemakaian,
             getPemakaianByID: getPemakaianByID,
             insertPemakaian: insertPemakaian,
@@ -40,7 +43,9 @@
             getBookingByID: getBookingByID,
             insertBooking: insertBooking,
             deleteBooking: deleteBooking,
-            editBooking: editBooking
+            editBooking: editBooking,
+            getPengadaan: getPengadaan,
+            insertPengadaan: insertPengadaan
         };
 
         function getATK() {
@@ -116,8 +121,8 @@
 
         function changeStokATK(jumlah, jenis, nama) {
           var deferred = $q.defer();
-          var query = "UPDATE t_master_atk SET stok = stok + ? WHERE jenis = ? AND nama=?";
-          connection.query(query, [jumlah], [jenis], [nama], function (err, res) {
+          var query = "UPDATE t_master_atk SET stok = stok+? WHERE jenis=? AND nama=?";
+          connection.query(query, [jumlah, jenis, nama], function (err, res) {
               if (err) deferred.reject(err);
               deferred.resolve(res.affectedRows);
           });
@@ -184,6 +189,16 @@
           return deferred.promise;
         }
 
+        function getPenyuplaiByID(id) {
+          var deferred = $q.defer();
+          var query = "SELECT * FROM t_master_penyuplai WHERE id = ?";
+          connection.query(query, [id], function (err, rows) {
+              if (err) deferred.reject(err);
+              deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
         function insertPenyuplai(newpenyuplai) {
           var deferred = $q.defer();
           var query = "INSERT INTO t_master_penyuplai SET ?";
@@ -192,6 +207,26 @@
               deferred.resolve(res.insertId);
           });
           return deferred.promise;
+        }
+
+        function deletePenyuplai(id) {
+          var deferred = $q.defer();
+          var query = "DELETE FROM t_master_penyuplai WHERE id = ?";
+          connection.query(query, [id], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res.affectedRows);
+          });
+          return deferred.promise;
+        }
+
+        function editPenyuplai(editpenyuplai) {
+          var deferred = $q.defer();
+           var query = "UPDATE t_master_penyuplai SET id=?, nama=?, kontak=?, alamat=? WHERE id = ?";
+           connection.query(query, [editpenyuplai.id, editpenyuplai.nama, editpenyuplai.kontak, editpenyuplai.alamat, editpenyuplai.id], function (err, res) {
+               if (err) deferred.reject(err);
+               deferred.resolve(res);
+           });
+           return deferred.promise;
         }
 
         function getPemakaian() {
@@ -290,6 +325,26 @@
           connection.query(query, [id], function (err, res) {
               if (err) deferred.reject(err);
               deferred.resolve(res.affectedRows);
+          });
+          return deferred.promise;
+        }
+
+        function getPengadaan() {
+          var deferred = $q.defer();
+          var query = "SELECT t_trans_pengadaan.id AS id, tanggal_pesan, tanggal_datang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai";
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function insertPengadaan(newpengadaan) {
+          var deferred = $q.defer();
+          var query = "INSERT INTO t_trans_pengadaan (tanggal_pesan, penyuplai, atk, jumlah) VALUES (now(), (select id from t_master_penyuplai where nama=? limit 1), (select id from t_master_atk where jenis=? and nama=? limit 1), ?);";
+          connection.query(query, [newpengadaan.nama_penyuplai, newpengadaan.jenis, newpengadaan.nama, newpengadaan.jumlah], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res);
           });
           return deferred.promise;
         }

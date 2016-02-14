@@ -28,6 +28,10 @@
            .when('/statperiode', {
                templateUrl : 'statistik-per-periode.html',
                controller  : 'statistikPerPeriodeController'
+           })
+           .when('/pengadaan', {
+               templateUrl : 'pengadaan.html',
+               controller  : 'pengadaanController'
            });
    }]);
 
@@ -216,11 +220,33 @@
       $scope.predicate = predicate;
     };
 
+    $scope.getPenyuplaiByID = function (id) {
+      dbService.getPenyuplaiByID(id).then(function (response) {
+        $scope.editpenyuplai = response[0];
+      });
+    }
+
     $scope.createPenyuplai = function (newpenyuplai) {
       dbService.insertPenyuplai(newpenyuplai).then(function (response) {
         alert("Data penyuplai baru berhasil ditambahkan");
         getAllPenyuplai();
       });
+    }
+
+    $scope.editPenyuplai = function() {
+      dbService.editPenyuplai($scope.editpenyuplai).then(function (response) {
+        alert("Data penyuplai berhasil diubah");
+        getAllPenyuplai();
+      })
+    }
+
+    $scope.deletePenyuplai = function (id) {
+      var r = confirm("Apakah Anda yakin ingin menghapus data ini?");
+      if (r) {
+        dbService.deletePenyuplai(id).then(function (response) {
+          getAllPenyuplai();
+        });
+      }
     }
 
     // add active to menu
@@ -263,9 +289,10 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
 
     $scope.createPemakaian = function (newpemakaian) {
       dbService.insertPemakaian(newpemakaian).then(function (response) {
-        alert("Data pemakaian baru berhasil ditambahkan");
+      });
+      dbService.changeStokATK(-newpemakaian.jumlah, newpemakaian.jenis, newpemakaian.nama).then(function (response) {
         getAllPemakaian();
-        dbService.changeStokATK(-newpemakaian.jumlah, newpemakaian.jenis, newpemakaian.nama);
+        alert("Data berhasil ditambahkan");
       });
     }
 
@@ -300,82 +327,6 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
     // add active to menu
     $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
     $('#sidebar-menu a[href="#pemakaian"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
- }]);
-
- atkatApp.controller('pemakaiController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
-    getAllPemakai();
-    function getAllPemakai() {
-     dbService.getPemakai().then(function (response) {
-       $scope.pemakai = response;
-     });
-    }
-
-    $scope.predicate = 'id';
-    $scope.reverse = false;
-    $scope.order = function(predicate) {
-      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-      $scope.predicate = predicate;
-    };
-
-    $scope.getPemakaiByID = function (id) {
-      dbService.getPemakaiByID(id).then(function (response) {
-        $scope.editpemakai = response[0];
-      });
-    }
-
-    $scope.createPemakai = function (newpemakai) {
-      dbService.insertPemakai(newpemakai).then(function (response) {
-        alert("Data pemakai baru berhasil ditambahkan");
-        getAllPemakai();
-      });
-    }
-
-    $scope.editPemakai = function() {
-      dbService.editPemakai($scope.editpemakai).then(function (response) {
-        alert("Data pemakai berhasil diubah");
-        getAllPemakai();
-      })
-    }
-
-    $scope.deletePemakai = function (id) {
-      var r = confirm("Apakah Anda yakin ingin menghapus data ini?");
-      if (r) {
-        dbService.deletePemakai(id).then(function (response) {
-          getAllPemakai();
-        });
-      }
-    }
-
-    // add active to menu
-    $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
-    $('#sidebar-menu a[href="#pemakai"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
- }]);
-
-  atkatApp.controller('penyuplaiController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
-    getAllPenyuplai();
-    function getAllPenyuplai() {
-     dbService.getPenyuplai().then(function (response) {
-       $scope.penyuplai = response;
-     });
-    }
-
-    $scope.predicate = 'id';
-    $scope.reverse = false;
-    $scope.order = function(predicate) {
-      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
-      $scope.predicate = predicate;
-    };
-
-    $scope.createPenyuplai = function (newpenyuplai) {
-      dbService.insertPenyuplai(newpenyuplai).then(function (response) {
-        alert("Data penyuplai baru berhasil ditambahkan");
-        getAllPenyuplai();
-      });
-    }
-
-    // add active to menu
-    $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
-    $('#sidebar-menu a[href="#penyuplai"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
  }]);
 
  atkatApp.controller('bookingController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
@@ -449,4 +400,46 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
     // add active to menu
     $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
     $('#sidebar-menu a[href="#booking"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
+ }]);
+
+atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
+    getAllPengadaan();
+    getAllJenis();
+
+    function getAllPengadaan() {
+     dbService.getPengadaan().then(function (response) {
+       $scope.pengadaan = response;
+     });
+    }
+
+    function getAllJenis() {
+    dbService.getAllJenisATK().then(function(response) {
+        $scope.jenisbarang = response;
+      });
+    }
+
+    $scope.predicate = 'tanggal_pesan';
+    $scope.reverse = true;
+    $scope.order = function(predicate) {
+      $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;
+      $scope.predicate = predicate;
+    };
+
+
+    $scope.createPengadaan = function (newpengadaan) {
+      dbService.insertPengadaan(newpengadaan).then(function (response) {
+        alert("Data pengadaan berhasil ditambahkan");
+        getAllPengadaan();
+      });
+    }
+
+    $scope.jenisChanged = function() {
+      dbService.getNamaATKByJenis($scope.newpengadaan.jenis).then(function (response) {
+        $scope.namabarang = response;
+      });
+    }
+
+    // add active to menu
+    $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
+    $('#sidebar-menu a[href="#pengadaan"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
  }]);
