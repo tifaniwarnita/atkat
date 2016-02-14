@@ -30,7 +30,10 @@
             editPemakai: editPemakai,
             deletePemakai: deletePemakai,
             getPenyuplai: getPenyuplai,
+            getPenyuplaiByID: getPenyuplaiByID,
             insertPenyuplai: insertPenyuplai,
+            editPenyuplai: editPenyuplai,
+            deletePenyuplai: deletePenyuplai,
             getPemakaian: getPemakaian,
             getPemakaianByID: getPemakaianByID,
             insertPemakaian: insertPemakaian,
@@ -184,6 +187,16 @@
           return deferred.promise;
         }
 
+        function getPenyuplaiByID(id) {
+          var deferred = $q.defer();
+          var query = "SELECT * FROM t_master_penyuplai WHERE id = ?";
+          connection.query(query, [id], function (err, rows) {
+              if (err) deferred.reject(err);
+              deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
         function insertPenyuplai(newpenyuplai) {
           var deferred = $q.defer();
           var query = "INSERT INTO t_master_penyuplai SET ?";
@@ -192,6 +205,26 @@
               deferred.resolve(res.insertId);
           });
           return deferred.promise;
+        }
+
+        function deletePenyuplai(id) {
+          var deferred = $q.defer();
+          var query = "DELETE FROM t_master_penyuplai WHERE id = ?";
+          connection.query(query, [id], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res.affectedRows);
+          });
+          return deferred.promise;
+        }
+
+        function editPenyuplai(editpenyuplai) {
+          var deferred = $q.defer();
+           var query = "UPDATE t_master_penyuplai SET id=?, nama=?, kontak=?, alamat=? WHERE id = ?";
+           connection.query(query, [editpenyuplai.id, editpenyuplai.nama, editpenyuplai.kontak, editpenyuplai.alamat, editpenyuplai.id], function (err, res) {
+               if (err) deferred.reject(err);
+               deferred.resolve(res);
+           });
+           return deferred.promise;
         }
 
         function getPemakaian() {
