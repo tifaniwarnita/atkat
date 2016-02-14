@@ -116,8 +116,8 @@
 
         function changeStokATK(jumlah, jenis, nama) {
           var deferred = $q.defer();
-          var query = "UPDATE t_master_atk SET stok = stok + ? WHERE jenis = ? AND nama=?";
-          connection.query(query, [jumlah], [jenis], [nama], function (err, res) {
+          var query = "UPDATE t_master_atk SET stok = stok+? WHERE jenis=? AND nama=?";
+          connection.query(query, [jumlah, jenis, nama], function (err, res) {
               if (err) deferred.reject(err);
               deferred.resolve(res.affectedRows);
           });

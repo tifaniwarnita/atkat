@@ -187,9 +187,10 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
 
     $scope.createPemakaian = function (newpemakaian) {
       dbService.insertPemakaian(newpemakaian).then(function (response) {
-        alert("Data pemakaian baru berhasil ditambahkan");
+      });
+      dbService.changeStokATK(-newpemakaian.jumlah, newpemakaian.jenis, newpemakaian.nama).then(function (response) {
         getAllPemakaian();
-        dbService.changeStokATK(-newpemakaian.jumlah, newpemakaian.jenis, newpemakaian.nama);
+        alert("Data berhasil ditambahkan");
       });
     }
 
