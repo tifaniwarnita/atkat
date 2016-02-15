@@ -213,7 +213,7 @@
      });
     }
 
-    $scope.predicate = 'id';
+    $scope.predicate = 'nama';
     $scope.reverse = false;
     $scope.order = function(predicate) {
       $scope.reverse = ($scope.predicate === predicate) ? !$scope.reverse : false;

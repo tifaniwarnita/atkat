@@ -27,7 +27,6 @@
         <table class="table table-hover">
             <thead>
                 <tr>
-                    <th><a ng-click="order('id')">ID</a><span class="sortorder" ng-show="predicate === 'id'" ng-class="{reverse:reverse}"></th>
                     <th><a ng-click="order('nama')">Nama</a><span class="sortorder" ng-show="predicate === 'nama'" ng-class="{reverse:reverse}"></th>
                     <th><a ng-click="order('kontak')">Kontak</a><span class="sortorder" ng-show="predicate === 'kontak'" ng-class="{reverse:reverse}"></th>
                     <th><a ng-click="order('alamat')">Alamat</a><span class="sortorder" ng-show="predicate === 'alamat'" ng-class="{reverse:reverse}"></th>
@@ -36,7 +35,6 @@
             </thead>
             <tbody>
                 <tr ng-repeat="x in penyuplai | filter:query | orderBy:predicate:reverse">
-                    <th scope="row">{{x.id}}</th>
                     <td>{{x.nama}}</td>
                     <td>{{x.kontak}}</td>
                     <td>{{x.alamat}}</td>

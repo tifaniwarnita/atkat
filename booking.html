@@ -87,7 +87,7 @@
               </div>
               <div class="form-group">
                 <label>Tanggal Pakai</label>
-                <input id="tanggal_pakai_picker" class="date-picker form-control" required="required" type="text" ng-model="newbooking.tanggal_pakai">
+                <input id="tanggal_pakai_picker" required="required" type="text" ng-model="newbooking.tanggal_pakai">
             </div>
           </div>
           <div class="modal-footer">
@@ -141,13 +141,10 @@
 </div>
 </div>
 
+<link rel="stylesheet" type="text/css" href="js/datetimepicker-master/jquery.datetimepicker.css"/ >
+<script src="js/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#tanggal_pakai_picker').daterangepicker({
-            singleDatePicker: true,
-            calender_style: "picker_4"
-        }, function (start, end, label) {
-            console.log(start.toISOString(), end.toISOString(), label);
-        });
-    });
+$('#tanggal_pakai_picker').datetimepicker({
+  formatDate:'d/m/Y H:i',
+});
 </script>
