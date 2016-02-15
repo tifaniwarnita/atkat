@@ -87,7 +87,7 @@
           buttons: [{
               type: 'month',
               count: 3,
-              text: 'Day',
+              text: 'Hari',
               dataGrouping: {
                   forced: true,
                   units: [['day', [1]]]
@@ -95,23 +95,38 @@
           }, {
               type: 'year',
               count: 1,
-              text: 'Week',
+              text: 'Minggu',
               dataGrouping: {
                   forced: true,
                   units: [['week', [1]]]
               }
           }, {
               type: 'all',
-              text: 'Month',
+              text: 'Bulan',
               dataGrouping: {
                   forced: true,
                   units: [['month', [1]]]
               }
+          }, {
+              type: 'year',
+              text: 'Tahun',
+              dataGrouping: {
+                  forced: true,
+                  units: [['year', [1]]]
+              }
+          }, {
+              type: 'all',
+              text: 'Semua',
+              dataGrouping: {
+                  forced: true,
+                  units: [['all', [1]]]
+              }
           }],
+
           buttonTheme: {
               width: 60
           },
-          selected: 2
+          selected: 0
         },
         title: {
             text: 'Statistik ATK per Periode'
@@ -131,45 +146,6 @@
       });
 
     });
-
-
-    // Load module after Highcharts is loaded
-
-    data = [];
-    /* var data = [
-      [1234828800000,13.50],
-      [1234915200000,13.48],
-      [1235001600000,12.95],
-      [1235088000000,13.00],
-      [1235347200000,12.42],
-      [1235433600000,12.89],
-      [1235520000000,13.02],
-      [1235606400000,12.74],
-      [1235692800000,12.76],
-      [1235952000000,12.56],
-      [1236038400000,12.62],
-      [1236124800000,13.02],
-      [1236211200000,12.69],
-      [1236297600000,12.19],
-      [1236556800000,11.87],
-      [1236643200000,12.66],
-      [1236729600000,13.24],
-      [1236816000000,13.76],
-      [1236902400000,13.70],
-      [1237161600000,13.63],
-      [1237248000000,14.24],
-      [1237334400000,14.50],
-      [1237420800000,14.52],
-      [1237507200000,14.51],
-      [1237766400000,15.38],
-      [1237852800000,15.21],
-      [1237939200000,15.21],
-      [1238025600000,15.70],
-      [1238112000000,15.26],
-      [1238371200000,14.93],
-      [1238457600000,15.02]
-    ];*/
-
  }]);
 
  atkatApp.controller('atkController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
@@ -376,7 +352,7 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
           getAllPemakaian();
           alert("Data berhasil ditambahkan");
         });
-      } 
+      }
       else{
         alert("Stock untuk pemakaian tidak mencukupi");
       }
