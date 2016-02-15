@@ -347,7 +347,6 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
       dbService.getPemakaianByID(id).then(function (response) {
         $scope.editpemakaian = response[0];
         jumlah_awal = $scope.editpemakaian.jumlah;
-
         dbService.getNamaATKByJenis($scope.editpemakaian.jenis).then(function (response) {
           $scope.namabarang_edit = response;
         });
@@ -448,10 +447,9 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
       dbService.getBookingByID(id).then(function (response) {
         $scope.editbooking = response[0];
         $('#tanggal_pakai_edit').datetimepicker({
-          defaultDate: $scope.editbooking.defaultdate,
-          defaultTime: $scope.editbooking.defaulttime,
+          defaultDate: $scope.editbooking.datepakai,
+          defaultTime: $scope.editbooking.timepakai,
         });
-        $scope.editbooking.tanggal_pakai = $scope.editbooking.defaultdate + " " + $scope.editbooking.defaulttime;
         dbService.getNamaATKByJenis($scope.editbooking.jenis).then(function (response) {
           $scope.namabarang_edit = response;
         });
@@ -533,7 +531,15 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
       dbService.getPengadaanByID(id).then(function (response) {
         $scope.editpengadaan = response[0];
         jumlah_awal = $scope.editpengadaan.jumlah;
-
+        if ($scope.editpengadaan.tanggal_datang !== null) {
+        $('#tanggal_datang_edit').datetimepicker({
+            defaultDate: $scope.editpengadaan.datedatang,
+            defaultTime: $scope.editpengadaan.timedatang,
+        });
+      } else {
+        $('#tanggal_datang_edit').datetimepicker({
+        });
+      }
         dbService.getNamaATKByJenis($scope.editpengadaan.jenis).then(function (response) {
           $scope.namabarang_edit = response;
         });

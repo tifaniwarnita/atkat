@@ -309,7 +309,7 @@
 
         function getBookingByID(id) {
           var deferred = $q.defer();
-          var query = "SELECT t_trans_booking.id as id, DATE_FORMAT(tanggal_pakai, '%Y/%m/%d %H:%i') AS tanggal_pakai, DATE_FORMAT(tanggal_pakai,'%Y/%m/%d') AS defaultdate, DATE_FORMAT(tanggal_pakai,'%H:%i') AS defaulttime, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk WHERE t_trans_booking.id=?";
+          var query = "SELECT t_trans_booking.id as id, DATE_FORMAT(tanggal_pakai, '%Y/%m/%d %H:%i') AS tanggal_pakai, DATE_FORMAT(tanggal_pakai,'%Y/%m/%d') AS datepakai, DATE_FORMAT(tanggal_pakai,'%H:%i') AS timepakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk WHERE t_trans_booking.id=?";
           connection.query(query, [id], function (err, rows) {
               if (err) deferred.reject(err);
               deferred.resolve(rows);
@@ -359,7 +359,7 @@
 
         function getPengadaanByID(id) {
           var deferred = $q.defer();
-          var query = "SELECT t_trans_pengadaan.id AS id, DATE_FORMAT(tanggal_pesan,'%d %b %Y | %H:%i') AS tanggal_pesan, DATE_FORMAT(tanggal_datang,'%d %b %Y | %H:%i') AS tanggal_datang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai WHERE t_trans_pengadaan.id=?";
+          var query = "SELECT t_trans_pengadaan.id AS id, DATE_FORMAT(tanggal_datang, '%Y/%m/%d %H:%i') AS tanggal_datang, DATE_FORMAT(tanggal_datang,'%Y/%m/%d') AS datedatang, DATE_FORMAT(tanggal_datang,'%H:%i') AS timedatang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai WHERE t_trans_pengadaan.id=?";
           connection.query(query, [id], function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
