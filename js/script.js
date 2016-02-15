@@ -425,10 +425,28 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
       $scope.predicate = predicate;
     };
 
+    $scope.initEditPengadaan = function (id) {
+      dbService.getPengadaanByID(id).then(function (response) {
+        $scope.editpengadaan = response[0];
+
+        dbService.getNamaATKByJenis($scope.editpengadaan.jenis).then(function (response) {
+          $scope.namabarang_edit = response;
+        });
+      });
+    }
 
     $scope.createPengadaan = function (newpengadaan) {
       dbService.insertPengadaan(newpengadaan).then(function (response) {
-        alert("Data pengadaan berhasil ditambahkan");
+      });
+      dbService.changeStokATK(newpengadaan.jumlah, newpengadaan.jenis, newpengadaan.nama).then(function (response) {
+        getAllPengadaan();
+        alert("Data berhasil ditambahkan");
+      });
+    }
+
+    $scope.editPengadaan = function() {
+      dbService.editPengadaan($scope.editpengadaan).then(function (response) {
+        alert("Data pengadaan berhasil diubah");
         getAllPengadaan();
       });
     }
@@ -445,6 +463,12 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
     $scope.jenisChanged = function() {
       dbService.getNamaATKByJenis($scope.newpengadaan.jenis).then(function (response) {
         $scope.namabarang = response;
+      });
+    }
+
+    $scope.jenisChangedEdit = function() {
+      dbService.getNamaATKByJenis($scope.editpengadaan.jenis).then(function (response) {
+        $scope.namabarang_edit = response;
       });
     }
 

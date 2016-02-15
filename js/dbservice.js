@@ -45,7 +45,9 @@
             deleteBooking: deleteBooking,
             editBooking: editBooking,
             getPengadaan: getPengadaan,
+            getPengadaanByID: getPengadaanByID,
             insertPengadaan: insertPengadaan,
+            editPengadaan: editPengadaan,
             deletePengadaan: deletePengadaan
         };
 
@@ -332,8 +334,18 @@
 
         function getPengadaan() {
           var deferred = $q.defer();
-          var query = "SELECT t_trans_pengadaan.id AS id, tanggal_pesan, tanggal_datang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai";
+          var query = "SELECT t_trans_pengadaan.id AS id, DATE_FORMAT(tanggal_pesan,'%d %b %Y | %H:%i') AS tanggal_pesan, DATE_FORMAT(tanggal_datang,'%d %b %Y | %H:%i') AS tanggal_datang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai";
           connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function getPengadaanByID(id) {
+          var deferred = $q.defer();
+          var query = "SELECT t_trans_pengadaan.id AS id, DATE_FORMAT(tanggal_pesan,'%d %b %Y | %H:%i') AS tanggal_pesan, DATE_FORMAT(tanggal_datang,'%d %b %Y | %H:%i') AS tanggal_datang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai WHERE t_trans_pengadaan.id=?";
+          connection.query(query, [id], function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
           });
@@ -348,6 +360,16 @@
               deferred.resolve(res);
           });
           return deferred.promise;
+        }
+
+        function editPengadaan(editpengadaan) {
+          var deferred = $q.defer();
+           var query = "UPDATE t_trans_pengadaan SET penyuplai=(select id from t_master_penyuplai where nama=? limit 1), atk=(select id from t_master_atk where jenis=? and nama=? limit 1), jumlah=? WHERE id=?";
+           connection.query(query, [editpengadaan.nama_penyuplai, editpengadaan.jenis, editpengadaan.nama, editpengadaan.jumlah, editpengadaan.id], function (err, res) {
+               if (err) deferred.reject(err);
+               deferred.resolve(res);
+           });
+           return deferred.promise;
         }
 
         function deletePengadaan(id) {
