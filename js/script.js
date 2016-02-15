@@ -378,7 +378,7 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
           getAllPemakaian();
           alert("Data berhasil ditambahkan");
         });
-      } 
+      }
       else{
         alert("Stock untuk pemakaian tidak mencukupi");
       }
@@ -422,6 +422,8 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
  atkatApp.controller('bookingController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
     getAllBooking();
     getAllJenis();
+    $('#tanggal_pakai_picker').datetimepicker({
+    });
 
     function getAllBooking() {
      dbService.getBooking().then(function (response) {
@@ -445,7 +447,11 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
     $scope.initEditBooking = function (id) {
       dbService.getBookingByID(id).then(function (response) {
         $scope.editbooking = response[0];
-
+        $('#tanggal_pakai_edit').datetimepicker({
+          defaultDate: $scope.editbooking.defaultdate,
+          defaultTime: $scope.editbooking.defaulttime,
+        });
+        $scope.editbooking.tanggal_pakai = $scope.editbooking.defaultdate + " " + $scope.editbooking.defaulttime;
         dbService.getNamaATKByJenis($scope.editbooking.jenis).then(function (response) {
           $scope.namabarang_edit = response;
         });

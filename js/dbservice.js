@@ -299,7 +299,7 @@
 
         function getBooking() {
           var deferred = $q.defer();
-          var query = "SELECT DATE_FORMAT(tanggal_pesan,'%d %b %Y | %H:%i') AS tanggal_pesan, DATE_FORMAT(tanggal_pakai,'%d %b %Y | %H:%i') AS tanggal_pakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk";
+          var query = "SELECT t_trans_booking.id AS id, DATE_FORMAT(tanggal_pesan,'%d %b %Y | %H:%i') AS tanggal_pesan, DATE_FORMAT(tanggal_pakai,'%d %b %Y | %H:%i') AS tanggal_pakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk";
           connection.query(query, function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
@@ -309,7 +309,7 @@
 
         function getBookingByID(id) {
           var deferred = $q.defer();
-          var query = "SELECT t_trans_booking.id as id, tanggal_pakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk WHERE t_trans_booking.id=?";
+          var query = "SELECT t_trans_booking.id as id, DATE_FORMAT(tanggal_pakai, '%Y/%m/%d %H:%i') AS tanggal_pakai, DATE_FORMAT(tanggal_pakai,'%Y/%m/%d') AS defaultdate, DATE_FORMAT(tanggal_pakai,'%H:%i') AS defaulttime, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk WHERE t_trans_booking.id=?";
           connection.query(query, [id], function (err, rows) {
               if (err) deferred.reject(err);
               deferred.resolve(rows);
