@@ -31,6 +31,7 @@
             deletePemakai: deletePemakai,
             getPenyuplai: getPenyuplai,
             getPenyuplaiByID: getPenyuplaiByID,
+            getAllNamaPenyuplai: getAllNamaPenyuplai,
             insertPenyuplai: insertPenyuplai,
             editPenyuplai: editPenyuplai,
             deletePenyuplai: deletePenyuplai,
@@ -206,6 +207,16 @@
           return deferred.promise;
         }
 
+        function getAllNamaPenyuplai() {
+          var deferred = $q.defer();
+          var query = "SELECT DISTINCT nama FROM t_master_penyuplai";
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
         function insertPenyuplai(newpenyuplai) {
           var deferred = $q.defer();
           var query = "INSERT INTO t_master_penyuplai SET ?";
@@ -368,8 +379,8 @@
 
         function editPengadaan(editpengadaan) {
           var deferred = $q.defer();
-           var query = "UPDATE t_trans_pengadaan SET penyuplai=(select id from t_master_penyuplai where nama=? limit 1), atk=(select id from t_master_atk where jenis=? and nama=? limit 1), jumlah=? WHERE id=?";
-           connection.query(query, [editpengadaan.nama_penyuplai, editpengadaan.jenis, editpengadaan.nama, editpengadaan.jumlah, editpengadaan.id], function (err, res) {
+           var query = "UPDATE t_trans_pengadaan SET tanggal_datang=?, penyuplai=(select id from t_master_penyuplai where nama=? limit 1), atk=(select id from t_master_atk where jenis=? and nama=? limit 1), jumlah=? WHERE id=?";
+           connection.query(query, [editpengadaan.tanggal_datang, editpengadaan.nama_penyuplai, editpengadaan.jenis, editpengadaan.nama, editpengadaan.jumlah, editpengadaan.id], function (err, res) {
                if (err) deferred.reject(err);
                deferred.resolve(res);
            });

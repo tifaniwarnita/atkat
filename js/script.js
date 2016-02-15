@@ -491,7 +491,8 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
 atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
     getAllPengadaan();
     getAllJenis();
-
+    getAllNamaPenyuplai();
+    
     function getAllPengadaan() {
      dbService.getPengadaan().then(function (response) {
        $scope.pengadaan = response;
@@ -501,6 +502,12 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
     function getAllJenis() {
     dbService.getAllJenisATK().then(function(response) {
         $scope.jenisbarang = response;
+      });
+    }
+
+    function getAllNamaPenyuplai() {
+    dbService.getAllNamaPenyuplai().then(function(response) {
+        $scope.namapenyuplai = response;
       });
     }
 
