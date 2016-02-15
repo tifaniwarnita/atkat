@@ -36,21 +36,51 @@
    }]);
 
  atkatApp.controller('statistikPerPeriodeController', ['$scope', 'dbService', '$q', function($scope, dbService, $q) {
-   $scope.jenisPeriode = "Per Tahun";
 
-    var Highcharts = require('highcharts/highstock');
+    dbService.getStatistikPerPeriode().then(function(dataStatistik) {
+      var len = dataStatistik.length;
+      var i, j = -1, lastJenis = "";
+      var data = []; // array of series
+      var arrayJenis = [];
+      for (i = 0; i < len; i++) {
+        if (lastJenis === dataStatistik[i]["jenis"]) {
+          data[j]["data"].push([dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]);
+        } else {
+          lastJenis = dataStatistik[i]["jenis"];
+          arrayJenis.push(dataStatistik[i]["jenis"]);
+          var newData = {
+            "name"  : dataStatistik[i]["jenis"],
+            "data"  : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]]
+          } //object
+          data.push(newData);
+          j++;
+        }
+      }
 
-    // Load module after Highcharts is loaded
-    require('highcharts/modules/exporting')(Highcharts);
+      console.log(data);
 
-    // Create the chart
-    Highcharts.chart('container', {
-      chart: {
-            events: {
-              load: function() {
-                type: 'line'
-              }
+      var Highcharts = require('highcharts/highstock');
+      require('highcharts/modules/exporting')(Highcharts);
+
+      // Create the chart
+      Highcharts.StockChart('container', {
+        chart: {
+          events: {
+            load: function() {
+              type: 'line'
             }
+          }
+        },
+        legend: {
+            enabled: true,
+            align: 'right',
+            backgroundColor: '#FCFFC5',
+            borderColor: 'black',
+            borderWidth: 2,
+            layout: 'vertical',
+            verticalAlign: 'top',
+            y: 100,
+            shadow: true
         },
         rangeSelector : {
           allButtonsEnabled: true,
@@ -84,27 +114,62 @@
           selected: 2
         },
         title: {
-            text: 'Statistik ATK ' + $scope.jenisPeriode
+            text: 'Statistik ATK per Periode'
         },
         subtitle: {
-          text: 'Data statistik ATK dengan rincian periode kucing kucing'
+          text: 'Data statistik ATK dengan rincian per periode'
         },
+        series: data,
         xAxis: {
-          categories: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember']
+          categories: arrayJenis
         },
         yAxis: {
           title: {
-            text: 'Penggunaan ATK'
-          }
+              categories: 'Fruit eaten'
+            }
         },
-        series: [{
-          name: 'Pensil',
-          data: [1, 0, 4, 5, 6, 8]
-        }, {
-          name: 'Penghapus',
-          data: [5, 7, 3]
-        }]
+      });
+
     });
+
+
+    // Load module after Highcharts is loaded
+
+    data = [];
+    /* var data = [
+      [1234828800000,13.50],
+      [1234915200000,13.48],
+      [1235001600000,12.95],
+      [1235088000000,13.00],
+      [1235347200000,12.42],
+      [1235433600000,12.89],
+      [1235520000000,13.02],
+      [1235606400000,12.74],
+      [1235692800000,12.76],
+      [1235952000000,12.56],
+      [1236038400000,12.62],
+      [1236124800000,13.02],
+      [1236211200000,12.69],
+      [1236297600000,12.19],
+      [1236556800000,11.87],
+      [1236643200000,12.66],
+      [1236729600000,13.24],
+      [1236816000000,13.76],
+      [1236902400000,13.70],
+      [1237161600000,13.63],
+      [1237248000000,14.24],
+      [1237334400000,14.50],
+      [1237420800000,14.52],
+      [1237507200000,14.51],
+      [1237766400000,15.38],
+      [1237852800000,15.21],
+      [1237939200000,15.21],
+      [1238025600000,15.70],
+      [1238112000000,15.26],
+      [1238371200000,14.93],
+      [1238457600000,15.02]
+    ];*/
+
  }]);
 
  atkatApp.controller('atkController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {

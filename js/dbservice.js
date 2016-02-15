@@ -45,7 +45,8 @@
             deleteBooking: deleteBooking,
             editBooking: editBooking,
             getPengadaan: getPengadaan,
-            insertPengadaan: insertPengadaan
+            insertPengadaan: insertPengadaan,
+            getStatistikPerPeriode: getStatistikPerPeriode
         };
 
         function getATK() {
@@ -349,5 +350,14 @@
           return deferred.promise;
         }
 
+        function getStatistikPerPeriode() {
+          var deferred = $q.defer();
+          var query = "SELECT jenis, (UNIX_TIMESTAMP(tanggal)*1000) as tanggal, jumlah, satuan FROM t_trans_pemakaian JOIN t_master_atk ON t_trans_pemakaian.atk = t_master_atk.id ORDER BY jenis, tanggal;"
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
     }
 })();
