@@ -52,8 +52,10 @@
             insertPengadaan: insertPengadaan,
             editPengadaan: editPengadaan,
             deletePengadaan: deletePengadaan,
-            getStokATK: getStokATK,
-            getStockAlreadyBooked: getStockAlreadyBooked
+            getStockATK: getStockATK,
+            getStockAlreadyBooked: getStockAlreadyBooked,
+            getPenyuplaiByParam: getPenyuplaiByParam,
+            getATKByParam: getATKByParam
         };
 
         function getATK() {
@@ -397,7 +399,7 @@
           return deferred.promise;
         }
 
-        function getStokATK(jenis, nama){
+        function getStockATK(jenis, nama){
           var deferred = $q.defer();
           var query = "SELECT stok FROM t_master_atk WHERE jenis = ? AND nama = ?";
           connection.query(query, [jenis, nama], function(err, rows){
@@ -412,11 +414,10 @@
           var query = "SELECT SUM(jumlah) FROM t_trans_booking WHERE CURDATE() = DATE(tanggal_pakai) AND tanggal_pakai >= now()";
           connection.query(query, function(err, rows){
             if(err) deferred.reject(err);
-            deferred.resolve(res);
+            deferred.resolve(err);
             });
           return deferred.promise;
         }
-
 
         function getStatistikPerPeriode() {
           var deferred = $q.defer();
@@ -427,5 +428,25 @@
           });
           return deferred.promise;
         }
-      }
+
+        function getPenyuplaiByParam(nama, kontak, alamat){
+          var deferred = $q.defer();
+          var query = "SELECT * FROM t_master_penyuplai WHERE nama = ? AND kontak = ? AND alamat = ?";
+          connection.query(query, [nama, kontak, alamat], function(err, rows){
+            if(err) deferred.reject(err);
+            deferred.resolve(err);
+          });
+          return deferred.promise;
+        }
+
+        function getATKByParam(jenis, nama){
+          var deferred = $q.defer();
+          var query = "SELECT * FROM t_master_atk WHERE jenis = ? AND nama = ?";
+          connection.query(query, [jenis, nama_penyuplai], function(err, rows){
+            if(err) deferred.reject(err)
+              deferred.resolve(err);
+          });
+          return deferred.promise;
+        }
+    }
 })();

@@ -192,11 +192,31 @@
       });
     }
 
-    $scope.createATK = function (newatk) {
-      dbService.insertATK(newatk).then(function (response) {
-        alert("Data ATK baru berhasil ditambahkan");
-        getAllATK();
+    function validasiATK(jenis, nama){
+      var jenisATK, namaATK;
+      dbService.getgetATKByParam(jenis, nama).then(function(response){
+        jenisATK = response[0].jenis;
+        namaATK - response[0].nama;
+
+        if(jenisATK == jenis && namaATK == nama){
+          return true;
+        }
+        else{
+          return false;
+        }
       });
+    }
+
+    $scope.createATK = function (newatk) {
+      //if(!validasiATK(newatk.jenis, newatk.nama)){
+        dbService.insertATK(newatk).then(function (response) {
+          alert("Data ATK baru berhasil ditambahkan");
+          getAllATK();
+        });
+      /*}
+      else{
+        alert("Jenis dan nama ATK sudah tersedia");
+      }*/
     }
 
     $scope.editATK = function() {
@@ -291,11 +311,31 @@
       });
     }
 
-    $scope.createPenyuplai = function (newpenyuplai) {
-      dbService.insertPenyuplai(newpenyuplai).then(function (response) {
-        alert("Data penyuplai baru berhasil ditambahkan");
-        getAllPenyuplai();
+    function validasiPenyuplai(nama, kontak, alamat){
+      var namaPenyuplai, kontakPenyuplai, alamatPenyuplai;
+      dbService.getPenyuplaiByParam(nama, kontak, alamat).then(function(response){
+        namaPenyuplai = reponse[0].nama;
+        kontakPenyuplai = response[0].kontak;
+        alamatPenyuplai = response[0].alamat;
+
+        if(namaPenyuplai == nama && kontakPenyuplai == kontak && alamatPenyuplai == alamat){
+          return true;
+        }
+        else
+          return false;
       });
+    }
+
+    $scope.createPenyuplai = function (newpenyuplai) {
+      //if(!validasiPenyuplai(newpenyuplai.nama, newpenyuplai.kontak, newpenyuplai.alamat)){
+        dbService.insertPenyuplai(newpenyuplai).then(function (response) {
+          alert("Data penyuplai baru berhasil ditambahkan");
+          getAllPenyuplai();
+        });
+      /*}
+      else{
+        alert("Penyuplai sudah tersimpan dalam database");
+      }*/
     }
 
     $scope.editPenyuplai = function() {
@@ -353,34 +393,50 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
       });
     }
 
-    function validasiPemakaian(jenis, nama, jumlah){
+    function validasiStock(jenis, nama, jumlah){
       var stokATK, stockAlreadyBooked;
-      dbService.getStokATK(jenis, nama).then(function(response){
-        stokATK = response;
+      dbService.getStockATK(jenis, nama).then(function(response){
+        stokATK = response[0];
+        dbService.getStockAlreadyBooked().then(function(response){
+          stockAlreadyBooked = response[0];
+          if(stokATK-stockAlreadyBooked >= jumlah)
+            return true;
+          else
+            return false;
+        });
       });
+    }
 
-      dbService.getStockAlreadyBooked().then(function(response){
-        stockAlreadyBooked = response;
-      })
+    function validasiPemakai(id){
+      var pemakai;
+      dbService.getPemakaiByID(id).then(function(response){
+        pemakai = response[0];
 
-      if(stokATK-stockAlreadyBooked >= jumlah)
-        return true;
-      else
-        return false;
+        if(id == pemakai.id)
+          return true;
+        else
+          return false;
+      });
     }
 
     $scope.createPemakaian = function (newpemakaian) {
-      if(validasiPemakaian(newpemakaian.jenis, newpemakaian.nama, namapemakaian.jumlah)){
+      /*if(!validasiPemakai(newpemakaian.pemakai)){
+        alert("Pemakai tidak ada di daftar pemakai");
+      }
+      else if(!validasiStock(newpemakaian.jenis, newpemakaian.nama, namapemakaian.jumlah)){
+        alert("Stock untuk pemakaian tidak mencukupi");
+      }
+      else{*/
         dbService.insertPemakaian(newpemakaian).then(function (response) {
         });
         dbService.changeStokATK(-newpemakaian.jumlah, newpemakaian.jenis, newpemakaian.nama).then(function (response) {
           getAllPemakaian();
           alert("Data berhasil ditambahkan");
         });
-      }
+      /*}
       else{
         alert("Stock untuk pemakaian tidak mencukupi");
-      }
+      }*/
     }
 
     $scope.editPemakaian = function() {
@@ -456,11 +512,23 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
       });
     }
 
+    function validasiBooking(bookdate){
+      if(DATEDIFF(now() - bookdate) >= 1)
+        return true;
+      else
+        return false;
+    }
+
     $scope.createBooking = function (newbooking) {
-      dbService.insertBooking(newbooking).then(function (response) {
-        alert("Data booking baru berhasil ditambahkan");
-        getAllBooking();
-      });
+      /*if(validasiBooking(newbooking.tanggal_pakai)){*/
+        dbService.insertBooking(newbooking).then(function (response) {
+          alert("Data booking baru berhasil ditambahkan");
+          getAllBooking();
+        });
+      /*}
+      else{
+        alert("Booking paling cepat 1 hari dari sekarang");
+      }*/
     }
 
     $scope.editBooking = function() {
@@ -546,13 +614,25 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
       });
     }
 
+    function validasiPengadaan(tanggal_datang, tanggal_pesan){
+      if(tanggal_datang > tanggal_pesan)
+        return true;
+      else
+        return false;
+    }
+
     $scope.createPengadaan = function (newpengadaan) {
-      dbService.insertPengadaan(newpengadaan).then(function (response) {
-      });
-      dbService.changeStokATK(newpengadaan.jumlah, newpengadaan.jenis, newpengadaan.nama).then(function (response) {
-        getAllPengadaan();
-        alert("Data berhasil ditambahkan");
-      });
+      //if(validasiPengadaan(newpengadaan.tanggal_datang, newpengadaan.tanggal_pesan)){
+        dbService.insertPengadaan(newpengadaan).then(function (response) {
+        });
+        dbService.changeStokATK(newpengadaan.jumlah, newpengadaan.jenis, newpengadaan.nama).then(function (response) {
+          getAllPengadaan();
+          alert("Data berhasil ditambahkan");
+        });
+      /*}
+      else{
+        alert("Pengadaan gagal");
+      }*/
     }
 
     $scope.editPengadaan = function() {
