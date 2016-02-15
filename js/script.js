@@ -322,6 +322,7 @@
 atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
     getAllPemakaian();
     getAllJenis();
+    var jumlah_awal = 0;
 
     function getAllPemakaian() {
      dbService.getPemakaian().then(function (response) {
@@ -345,6 +346,7 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
     $scope.initEditPemakaian = function (id) {
       dbService.getPemakaianByID(id).then(function (response) {
         $scope.editpemakaian = response[0];
+        jumlah_awal = $scope.editpemakaian.jumlah;
 
         dbService.getNamaATKByJenis($scope.editpemakaian.jenis).then(function (response) {
           $scope.namabarang_edit = response;
@@ -384,8 +386,10 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
 
     $scope.editPemakaian = function() {
       dbService.editPemakaian($scope.editpemakaian).then(function (response) {
-        alert("Data pemakaian berhasil diubah");
+      });
+      dbService.changeStokATK(jumlah_awal-$scope.editpemakaian.jumlah, $scope.editpemakaian.jenis, $scope.editpemakaian.nama).then(function (response) {
         getAllPemakaian();
+        alert("Data pemakaian berhasil diubah");
       });
     }
 
@@ -492,7 +496,8 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
     getAllPengadaan();
     getAllJenis();
     getAllNamaPenyuplai();
-    
+    var jumlah_awal = 0;
+
     function getAllPengadaan() {
      dbService.getPengadaan().then(function (response) {
        $scope.pengadaan = response;
@@ -521,6 +526,7 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
     $scope.initEditPengadaan = function (id) {
       dbService.getPengadaanByID(id).then(function (response) {
         $scope.editpengadaan = response[0];
+        jumlah_awal = $scope.editpengadaan.jumlah;
 
         dbService.getNamaATKByJenis($scope.editpengadaan.jenis).then(function (response) {
           $scope.namabarang_edit = response;
@@ -539,8 +545,10 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
 
     $scope.editPengadaan = function() {
       dbService.editPengadaan($scope.editpengadaan).then(function (response) {
-        alert("Data pengadaan berhasil diubah");
+      });
+      dbService.changeStokATK($scope.editpengadaan.jumlah - jumlah_awal, $scope.editpengadaan.jenis, $scope.editpengadaan.nama).then(function (response) {
         getAllPengadaan();
+        alert("Data pengadaan berhasil diubah");
       });
     }
 
