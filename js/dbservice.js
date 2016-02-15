@@ -45,7 +45,8 @@
             deleteBooking: deleteBooking,
             editBooking: editBooking,
             getPengadaan: getPengadaan,
-            insertPengadaan: insertPengadaan
+            insertPengadaan: insertPengadaan,
+            deletePengadaan: deletePengadaan
         };
 
         function getATK() {
@@ -345,6 +346,16 @@
           connection.query(query, [newpengadaan.nama_penyuplai, newpengadaan.jenis, newpengadaan.nama, newpengadaan.jumlah], function (err, res) {
               if (err) deferred.reject(err);
               deferred.resolve(res);
+          });
+          return deferred.promise;
+        }
+
+        function deletePengadaan(id) {
+          var deferred = $q.defer();
+          var query = "DELETE FROM t_trans_pengadaan WHERE id = ?";
+          connection.query(query, [id], function (err, res) {
+              if (err) deferred.reject(err);
+              deferred.resolve(res.affectedRows);
           });
           return deferred.promise;
         }

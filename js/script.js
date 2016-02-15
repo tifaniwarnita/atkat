@@ -433,6 +433,15 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
       });
     }
 
+    $scope.deletePengadaan = function (id) {
+      var r = confirm("Apakah Anda yakin ingin menghapus data ini?");
+      if (r) {
+        dbService.deletePengadaan(id).then(function (response) {
+          getAllPengadaan();
+        });
+      }
+    }
+
     $scope.jenisChanged = function() {
       dbService.getNamaATKByJenis($scope.newpengadaan.jenis).then(function (response) {
         $scope.namabarang = response;
