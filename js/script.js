@@ -25,13 +25,17 @@
                templateUrl : 'booking.html',
                controller  : 'bookingController'
            })
+           .when('/pengadaan', {
+               templateUrl : 'pengadaan.html',
+               controller  : 'pengadaanController'
+           })
            .when('/statperiode', {
                templateUrl : 'statistik-per-periode.html',
                controller  : 'statistikPerPeriodeController'
            })
-           .when('/pengadaan', {
-               templateUrl : 'pengadaan.html',
-               controller  : 'pengadaanController'
+           .when('/statpemakai', {
+               templateUrl : 'statistik-per-pemakai.html',
+               controller  : 'statistikPerPemakai'
            });
    }]);
 
@@ -146,6 +150,128 @@
       });
 
     });
+ }]);
+
+ atkatApp.controller('statistikPerPemakai', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
+     dbService.getPemakai().then(function(response) {
+       $scope.namapemakai = response;
+       $scope.selectedpemakai = response[0]["nama"];
+       $scope.pemakaiChanged();
+       console.log($scope.namapemakai);
+     });
+
+     $scope.pemakaiChanged = function() {
+       dbService.getStatistikPerPeriodePerPemakai($scope.selectedpemakai).then(function(dataStatistik) {
+         var len = dataStatistik.length;
+         var i, j = -1, lastJenis = "";
+         var data = []; // array of series
+         var arrayJenis = [];
+         for (i = 0; i < len; i++) {
+           if (lastJenis === dataStatistik[i]["jenis"]) {
+             data[j]["data"].push([dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]);
+           } else {
+             lastJenis = dataStatistik[i]["jenis"];
+             arrayJenis.push(dataStatistik[i]["jenis"]);
+             var newData = {
+               "name"  : dataStatistik[i]["jenis"],
+               "data"  : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]]
+             } //object
+             data.push(newData);
+             j++;
+           }
+         }
+
+         if (len==0) { //No data
+          alert("Tidak ada data pemakaian untuk " + $scope.selectedpemakai);
+         } else { //Highcharts beraksi
+            var Highcharts = require('highcharts/highstock');
+            require('highcharts/modules/exporting')(Highcharts);
+
+            // Create the chart
+            Highcharts.StockChart('container', {
+              chart: {
+                events: {
+                  load: function() {
+                    type: 'line'
+                  }
+                }
+              },
+              legend: {
+                  enabled: true,
+                  align: 'right',
+                  backgroundColor: '#FCFFC5',
+                  borderColor: 'black',
+                  borderWidth: 2,
+                  layout: 'vertical',
+                  verticalAlign: 'top',
+                  y: 100,
+                  shadow: true
+              },
+              rangeSelector : {
+                allButtonsEnabled: true,
+                buttons: [{
+                    type: 'month',
+                    count: 3,
+                    text: 'Hari',
+                    dataGrouping: {
+                        forced: true,
+                        units: [['day', [1]]]
+                    }
+                }, {
+                    type: 'year',
+                    count: 1,
+                    text: 'Minggu',
+                    dataGrouping: {
+                        forced: true,
+                        units: [['week', [1]]]
+                    }
+                }, {
+                    type: 'all',
+                    text: 'Bulan',
+                    dataGrouping: {
+                        forced: true,
+                        units: [['month', [1]]]
+                    }
+                }, {
+                    type: 'year',
+                    text: 'Tahun',
+                    dataGrouping: {
+                        forced: true,
+                        units: [['year', [1]]]
+                    }
+                }, {
+                    type: 'all',
+                    text: 'Semua',
+                    dataGrouping: {
+                        forced: true,
+                        units: [['all', [1]]]
+                    }
+                }],
+
+                buttonTheme: {
+                    width: 60
+                },
+                selected: 0
+              },
+              title: {
+                  text: 'Statistik ATK per Periode oleh ' + $scope.selectedpemakai
+              },
+              subtitle: {
+                text: 'Data statistik dari salah satu pemakai bernama ' + $scope.selectedpemakai + ' ATK dengan rincian per periode'
+              },
+              series: data,
+              xAxis: {
+                categories: arrayJenis
+              },
+              yAxis: {
+                title: {
+                    categories: 'Fruit eaten'
+                  }
+              },
+            });
+         }
+       });
+     }
  }]);
 
  atkatApp.controller('atkController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {

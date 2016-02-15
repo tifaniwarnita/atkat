@@ -48,6 +48,7 @@
             getPengadaan: getPengadaan,
             insertPengadaan: insertPengadaan,
             getStatistikPerPeriode: getStatistikPerPeriode,
+            getStatistikPerPeriodePerPemakai: getStatistikPerPeriodePerPemakai,
             getPengadaanByID: getPengadaanByID,
             insertPengadaan: insertPengadaan,
             editPengadaan: editPengadaan,
@@ -419,16 +420,6 @@
           return deferred.promise;
         }
 
-        function getStatistikPerPeriode() {
-          var deferred = $q.defer();
-          var query = "SELECT jenis, (UNIX_TIMESTAMP(tanggal)*1000) as tanggal, jumlah, satuan FROM t_trans_pemakaian JOIN t_master_atk ON t_trans_pemakaian.atk = t_master_atk.id ORDER BY jenis, tanggal;"
-          connection.query(query, function (err, rows) {
-             if (err) deferred.reject(err);
-             deferred.resolve(rows);
-          });
-          return deferred.promise;
-        }
-
         function getPenyuplaiByParam(nama, kontak, alamat){
           var deferred = $q.defer();
           var query = "SELECT * FROM t_master_penyuplai WHERE nama = ? AND kontak = ? AND alamat = ?";
@@ -445,6 +436,26 @@
           connection.query(query, [jenis, nama_penyuplai], function(err, rows){
             if(err) deferred.reject(err)
               deferred.resolve(err);
+          });
+          return deferred.promise;
+        }
+
+        function getStatistikPerPeriode() {
+          var deferred = $q.defer();
+          var query = "SELECT jenis, (UNIX_TIMESTAMP(tanggal)*1000) as tanggal, jumlah, satuan FROM t_trans_pemakaian JOIN t_master_atk ON t_trans_pemakaian.atk = t_master_atk.id ORDER BY jenis, tanggal;"
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function getStatistikPerPeriodePerPemakai(nama) {
+          var deferred = $q.defer();
+          var query = "SELECT t_master_atk.jenis, (UNIX_TIMESTAMP(tanggal)*1000) as tanggal, jumlah, satuan FROM t_trans_pemakaian JOIN t_master_atk ON t_trans_pemakaian.atk = t_master_atk.id JOIN t_master_pemakai ON t_trans_pemakaian.pemakai = t_master_pemakai.id WHERE t_master_pemakai.nama = ? ORDER BY t_master_atk.jenis, tanggal;"
+          connection.query(query, [nama], function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
           });
           return deferred.promise;
         }
