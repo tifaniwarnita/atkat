@@ -287,13 +287,34 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
       });
     }
 
+    function validasiPemakaian(jenis, nama, jumlah){
+      var stokATK, stockAlreadyBooked;
+      dbService.getStokATK(jenis, nama).then(function(response){
+        stokATK = response;
+      });
+
+      dbService.getStockAlreadyBooked().then(function(response){
+        stockAlreadyBooked = response;
+      })
+
+      if(stokATK-stockAlreadyBooked >= jumlah)
+        return true;
+      else
+        return false;
+    }
+
     $scope.createPemakaian = function (newpemakaian) {
-      dbService.insertPemakaian(newpemakaian).then(function (response) {
-      });
-      dbService.changeStokATK(-newpemakaian.jumlah, newpemakaian.jenis, newpemakaian.nama).then(function (response) {
-        getAllPemakaian();
-        alert("Data berhasil ditambahkan");
-      });
+      if(validasiPemakaian(newpemakaian.jenis, newpemakaian.nama, namapemakaian.jumlah)){
+        dbService.insertPemakaian(newpemakaian).then(function (response) {
+        });
+        dbService.changeStokATK(-newpemakaian.jumlah, newpemakaian.jenis, newpemakaian.nama).then(function (response) {
+          getAllPemakaian();
+          alert("Data berhasil ditambahkan");
+        });
+      } 
+      else{
+        alert("Stock untuk pemakaian tidak mencukupi");
+      }
     }
 
     $scope.editPemakaian = function() {

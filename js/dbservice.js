@@ -49,6 +49,8 @@
             insertPengadaan: insertPengadaan,
             editPengadaan: editPengadaan,
             deletePengadaan: deletePengadaan
+            getStokATK: getStokATK,
+            getStockAlreadyBooked: getStockAlreadyBooked
         };
 
         function getATK() {
