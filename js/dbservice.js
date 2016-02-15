@@ -31,6 +31,7 @@
             deletePemakai: deletePemakai,
             getPenyuplai: getPenyuplai,
             getPenyuplaiByID: getPenyuplaiByID,
+            getAllNamaPenyuplai: getAllNamaPenyuplai,
             insertPenyuplai: insertPenyuplai,
             editPenyuplai: editPenyuplai,
             deletePenyuplai: deletePenyuplai,
@@ -51,8 +52,10 @@
             insertPengadaan: insertPengadaan,
             editPengadaan: editPengadaan,
             deletePengadaan: deletePengadaan,
-            getStokATK: getStokATK,
-            getStockAlreadyBooked: getStockAlreadyBooked
+            getStockATK: getStockATK,
+            getStockAlreadyBooked: getStockAlreadyBooked,
+            getPenyuplaiByParam: getPenyuplaiByParam,
+            getATKByParam: getATKByParam
         };
 
         function getATK() {
@@ -206,6 +209,16 @@
           return deferred.promise;
         }
 
+        function getAllNamaPenyuplai() {
+          var deferred = $q.defer();
+          var query = "SELECT DISTINCT nama FROM t_master_penyuplai";
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
         function insertPenyuplai(newpenyuplai) {
           var deferred = $q.defer();
           var query = "INSERT INTO t_master_penyuplai SET ?";
@@ -288,7 +301,7 @@
 
         function getBooking() {
           var deferred = $q.defer();
-          var query = "SELECT DATE_FORMAT(tanggal_pesan,'%d %b %Y | %H:%i') AS tanggal_pesan, DATE_FORMAT(tanggal_pakai,'%d %b %Y | %H:%i') AS tanggal_pakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk";
+          var query = "SELECT t_trans_booking.id AS id, DATE_FORMAT(tanggal_pesan,'%d %b %Y | %H:%i') AS tanggal_pesan, DATE_FORMAT(tanggal_pakai,'%d %b %Y | %H:%i') AS tanggal_pakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk";
           connection.query(query, function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
@@ -298,7 +311,7 @@
 
         function getBookingByID(id) {
           var deferred = $q.defer();
-          var query = "SELECT t_trans_booking.id as id, tanggal_pakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk WHERE t_trans_booking.id=?";
+          var query = "SELECT t_trans_booking.id as id, DATE_FORMAT(tanggal_pakai, '%Y/%m/%d %H:%i') AS tanggal_pakai, DATE_FORMAT(tanggal_pakai,'%Y/%m/%d') AS datepakai, DATE_FORMAT(tanggal_pakai,'%H:%i') AS timepakai, pemakai, jenis, nama, jumlah, satuan FROM t_trans_booking INNER JOIN t_master_atk ON t_master_atk.id=t_trans_booking.atk WHERE t_trans_booking.id=?";
           connection.query(query, [id], function (err, rows) {
               if (err) deferred.reject(err);
               deferred.resolve(rows);
@@ -348,7 +361,7 @@
 
         function getPengadaanByID(id) {
           var deferred = $q.defer();
-          var query = "SELECT t_trans_pengadaan.id AS id, DATE_FORMAT(tanggal_pesan,'%d %b %Y | %H:%i') AS tanggal_pesan, DATE_FORMAT(tanggal_datang,'%d %b %Y | %H:%i') AS tanggal_datang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai WHERE t_trans_pengadaan.id=?";
+          var query = "SELECT t_trans_pengadaan.id AS id, DATE_FORMAT(tanggal_datang, '%Y/%m/%d %H:%i') AS tanggal_datang, DATE_FORMAT(tanggal_datang,'%Y/%m/%d') AS datedatang, DATE_FORMAT(tanggal_datang,'%H:%i') AS timedatang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai WHERE t_trans_pengadaan.id=?";
           connection.query(query, [id], function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
@@ -368,8 +381,8 @@
 
         function editPengadaan(editpengadaan) {
           var deferred = $q.defer();
-           var query = "UPDATE t_trans_pengadaan SET penyuplai=(select id from t_master_penyuplai where nama=? limit 1), atk=(select id from t_master_atk where jenis=? and nama=? limit 1), jumlah=? WHERE id=?";
-           connection.query(query, [editpengadaan.nama_penyuplai, editpengadaan.jenis, editpengadaan.nama, editpengadaan.jumlah, editpengadaan.id], function (err, res) {
+           var query = "UPDATE t_trans_pengadaan SET tanggal_datang=?, penyuplai=(select id from t_master_penyuplai where nama=? limit 1), atk=(select id from t_master_atk where jenis=? and nama=? limit 1), jumlah=? WHERE id=?";
+           connection.query(query, [editpengadaan.tanggal_datang, editpengadaan.nama_penyuplai, editpengadaan.jenis, editpengadaan.nama, editpengadaan.jumlah, editpengadaan.id], function (err, res) {
                if (err) deferred.reject(err);
                deferred.resolve(res);
            });
@@ -386,7 +399,7 @@
           return deferred.promise;
         }
 
-        function getStokATK(jenis, nama){
+        function getStockATK(jenis, nama){
           var deferred = $q.defer();
           var query = "SELECT stok FROM t_master_atk WHERE jenis = ? AND nama = ?";
           connection.query(query, [jenis, nama], function(err, rows){
@@ -401,11 +414,10 @@
           var query = "SELECT SUM(jumlah) FROM t_trans_booking WHERE CURDATE() = DATE(tanggal_pakai) AND tanggal_pakai >= now()";
           connection.query(query, function(err, rows){
             if(err) deferred.reject(err);
-            deferred.resolve(res);
+            deferred.resolve(err);
             });
           return deferred.promise;
         }
-
 
         function getStatistikPerPeriode() {
           var deferred = $q.defer();
@@ -416,5 +428,25 @@
           });
           return deferred.promise;
         }
-      }
+
+        function getPenyuplaiByParam(nama, kontak, alamat){
+          var deferred = $q.defer();
+          var query = "SELECT * FROM t_master_penyuplai WHERE nama = ? AND kontak = ? AND alamat = ?";
+          connection.query(query, [nama, kontak, alamat], function(err, rows){
+            if(err) deferred.reject(err);
+            deferred.resolve(err);
+          });
+          return deferred.promise;
+        }
+
+        function getATKByParam(jenis, nama){
+          var deferred = $q.defer();
+          var query = "SELECT * FROM t_master_atk WHERE jenis = ? AND nama = ?";
+          connection.query(query, [jenis, nama_penyuplai], function(err, rows){
+            if(err) deferred.reject(err)
+              deferred.resolve(err);
+          });
+          return deferred.promise;
+        }
+    }
 })();

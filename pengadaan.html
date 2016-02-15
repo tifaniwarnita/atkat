@@ -71,7 +71,8 @@
             <form role="form" name="newPengadaanForm">
               <div class="form-group">
                 <label for="nama-penyuplai">Nama Penyuplai</label>
-                <input type="text" class="form-control" id="mana-penyuplai" ng-model="newpengadaan.nama_penyuplai" required>
+                <select id="nama-penyuplai" class="form-control" ng-options="penyuplai.nama as penyuplai.nama for penyuplai in namapenyuplai" ng-model="newpengadaan.nama_penyuplai">
+                </select>
               </div>
               <div class="form-group">
                 <label for="jenis-barang">Jenis Barang</label>
@@ -87,7 +88,7 @@
               </div>
               <div class="form-group">
                 <label for="jumlah-barang">Jumlah</label>
-                <input type="number" min="0" class="form-control" id="jumlah-barang" ng-model="newpengadaan.jumlah" required>
+                <input type="number" min="1" class="form-control" id="jumlah-barang" ng-model="newpengadaan.jumlah" required>
               </div>
           </div>
           <div class="modal-footer">
@@ -114,7 +115,8 @@
             <form role="form" name="editPengadaanForm">
               <div class="form-group">
                 <label for="nama-penyuplai">Nama Penyuplai</label>
-                <input type="text" class="form-control" id="mana-penyuplai" ng-model="editpengadaan.nama_penyuplai" required>
+                <select id="nama-penyuplai" class="form-control" ng-options="penyuplai.nama as penyuplai.nama for penyuplai in namapenyuplai" ng-model="editpengadaan.nama_penyuplai">
+                </select>
               </div>
               <div class="form-group">
                 <label for="jenis-barang">Jenis Barang</label>
@@ -130,7 +132,11 @@
               </div>
               <div class="form-group">
                 <label for="jumlah-barang">Jumlah</label>
-                <input type="number" min="0" class="form-control" id="jumlah-barang" ng-model="editpengadaan.jumlah" required>
+                <input type="number" min="1" class="form-control" id="jumlah-barang" ng-model="editpengadaan.jumlah" required>
+              </div>
+              <div class="form-group">
+                <label>Tanggal Datang</label>
+                <input id="tanggal_datang_edit" required="required" type="text" ng-model="editpengadaan.tanggal_datang">
               </div>
           </div>
           <div class="modal-footer">
@@ -145,3 +151,8 @@
 
 </div>
 </div>
+<link rel="stylesheet" type="text/css" href="js/datetimepicker-master/jquery.datetimepicker.css"/ >
+<script src="js/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
+<script type="text/javascript">
+  $.datetimepicker.setLocale('id');
+</script>

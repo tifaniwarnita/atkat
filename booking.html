@@ -83,7 +83,7 @@
               </div>
               <div class="form-group">
                 <label for="jumlah-barang">Jumlah</label>
-                <input type="number" min="0" class="form-control" id="jumlah-barang" ng-model="newbooking.jumlah" required>
+                <input type="number" min="1" class="form-control" id="jumlah-barang" ng-model="newbooking.jumlah" required>
               </div>
               <div class="form-group">
                 <label>Tanggal Pakai</label>
@@ -126,8 +126,12 @@
               </div>
               <div class="form-group">
                 <label for="jumlah-barang">Jumlah</label>
-                <input type="number" min="0" class="form-control" id="jumlah-barang" ng-model="editbooking.jumlah" required>
+                <input type="number" min="1" class="form-control" id="jumlah-barang" ng-model="editbooking.jumlah" required>
               </div>
+              <div class="form-group">
+                <label>Tanggal Pakai</label>
+                <input id="tanggal_pakai_edit" required="required" type="text" ng-model="editbooking.tanggal_pakai">
+            </div>
           </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
@@ -144,8 +148,5 @@
 <link rel="stylesheet" type="text/css" href="js/datetimepicker-master/jquery.datetimepicker.css"/ >
 <script src="js/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
 <script type="text/javascript">
-$.datetimepicker.setLocale('id');
-$('#tanggal_pakai_picker').datetimepicker({
-  formatDate:'d/m/Y H:i',
-});
+  $.datetimepicker.setLocale('id');
 </script>
