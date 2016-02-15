@@ -352,13 +352,34 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
       });
     }
 
+    function validasiPemakaian(jenis, nama, jumlah){
+      var stokATK, stockAlreadyBooked;
+      dbService.getStokATK(jenis, nama).then(function(response){
+        stokATK = response;
+      });
+
+      dbService.getStockAlreadyBooked().then(function(response){
+        stockAlreadyBooked = response;
+      })
+
+      if(stokATK-stockAlreadyBooked >= jumlah)
+        return true;
+      else
+        return false;
+    }
+
     $scope.createPemakaian = function (newpemakaian) {
-      dbService.insertPemakaian(newpemakaian).then(function (response) {
-      });
-      dbService.changeStokATK(-newpemakaian.jumlah, newpemakaian.jenis, newpemakaian.nama).then(function (response) {
-        getAllPemakaian();
-        alert("Data berhasil ditambahkan");
-      });
+      if(validasiPemakaian(newpemakaian.jenis, newpemakaian.nama, namapemakaian.jumlah)){
+        dbService.insertPemakaian(newpemakaian).then(function (response) {
+        });
+        dbService.changeStokATK(-newpemakaian.jumlah, newpemakaian.jenis, newpemakaian.nama).then(function (response) {
+          getAllPemakaian();
+          alert("Data berhasil ditambahkan");
+        });
+      } 
+      else{
+        alert("Stock untuk pemakaian tidak mencukupi");
+      }
     }
 
     $scope.editPemakaian = function() {
@@ -490,17 +511,50 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
       $scope.predicate = predicate;
     };
 
+    $scope.initEditPengadaan = function (id) {
+      dbService.getPengadaanByID(id).then(function (response) {
+        $scope.editpengadaan = response[0];
+
+        dbService.getNamaATKByJenis($scope.editpengadaan.jenis).then(function (response) {
+          $scope.namabarang_edit = response;
+        });
+      });
+    }
 
     $scope.createPengadaan = function (newpengadaan) {
       dbService.insertPengadaan(newpengadaan).then(function (response) {
-        alert("Data pengadaan berhasil ditambahkan");
+      });
+      dbService.changeStokATK(newpengadaan.jumlah, newpengadaan.jenis, newpengadaan.nama).then(function (response) {
+        getAllPengadaan();
+        alert("Data berhasil ditambahkan");
+      });
+    }
+
+    $scope.editPengadaan = function() {
+      dbService.editPengadaan($scope.editpengadaan).then(function (response) {
+        alert("Data pengadaan berhasil diubah");
         getAllPengadaan();
       });
+    }
+
+    $scope.deletePengadaan = function (id) {
+      var r = confirm("Apakah Anda yakin ingin menghapus data ini?");
+      if (r) {
+        dbService.deletePengadaan(id).then(function (response) {
+          getAllPengadaan();
+        });
+      }
     }
 
     $scope.jenisChanged = function() {
       dbService.getNamaATKByJenis($scope.newpengadaan.jenis).then(function (response) {
         $scope.namabarang = response;
+      });
+    }
+
+    $scope.jenisChangedEdit = function() {
+      dbService.getNamaATKByJenis($scope.editpengadaan.jenis).then(function (response) {
+        $scope.namabarang_edit = response;
       });
     }
 

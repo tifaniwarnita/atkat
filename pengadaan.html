@@ -56,6 +56,7 @@
   </div>
 </div>
 </div>
+
 <!-- Modal Tambah Pengadaan -->
     <div class="modal fade" id="tambahPengadaan" role="dialog">
     <div class="modal-dialog">
@@ -92,6 +93,49 @@
           <div class="modal-footer">
             <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
             <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="newPengadaanForm.$invalid" ng-click="createPengadaan(newpengadaan)"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
+          </div>
+        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+<!-- Modal Edit Pengadaan -->
+    <div class="modal fade" id="editPengadaan" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4>Ubah Pengadaan</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" name="editPengadaanForm">
+              <div class="form-group">
+                <label for="nama-penyuplai">Nama Penyuplai</label>
+                <input type="text" class="form-control" id="mana-penyuplai" ng-model="editpengadaan.nama_penyuplai" required>
+              </div>
+              <div class="form-group">
+                <label for="jenis-barang">Jenis Barang</label>
+                <select id="jenis-barang" class="form-control" ng-options="barang.jenis as barang.jenis for barang in jenisbarang" ng-model="editpengadaan.jenis" ng-change="jenisChangedEdit()">
+                </select>
+                <!--<input type="text" class="form-control" id="jenis-barang" ng-model="newpemakaian.jenis" required>-->
+              </div>
+              <div class="form-group">
+                <label for="nama-barang">Nama Barang</label>
+                <select id="nama-barang" class="form-control" ng-options="barang.nama as barang.nama for barang in namabarang_edit" ng-model="editpengadaan.nama">
+                </select>
+                <!--<input type="text" class="form-control" id="nama-barang" ng-model="newpemakaian.nama" required>-->
+              </div>
+              <div class="form-group">
+                <label for="jumlah-barang">Jumlah</label>
+                <input type="number" min="0" class="form-control" id="jumlah-barang" ng-model="editpengadaan.jumlah" required>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
+            <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="editPengadaanForm.$invalid" ng-click="editPengadaan(editpengadaan)"><span class="glyphicon glyphicon-ok"></span> Ubah</button>
           </div>
         </form>
           </div>
