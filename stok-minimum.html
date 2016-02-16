@@ -1,0 +1,53 @@
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Stok Minimum ATK per Periode</h3>
+            </div>
+            <div class="title_right">
+              <label>Perhitungan berdasarkan data periode: </label>
+                <select ng-change="selectPeriode()" ng-model="selected">
+                  <option value="bulan">Bulan</option>
+                  <option value="tahun">Tahun</option>
+                </select>
+            </div>
+          </div>
+    </div>
+        <div class="clearfix"></div>
+        <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Cari barang..." ng-model="query">
+              <span class="input-group-btn">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+              </span>
+            </div>
+          </div>
+    <div class="x_content">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><a ng-click="order('jenis')">Jenis</a><span class="sortorder" ng-show="predicate === 'jenis'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('nama')">Nama</a><span class="sortorder" ng-show="predicate === 'nama'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('stokmin')">Stok Minimum</a><span class="sortorder" ng-show="predicate === 'stokmin'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('satuan')">Satuan</a><span class="sortorder" ng-show="predicate === 'satuan'" ng-class="{reverse:reverse}"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in stokminatk | filter:query | orderBy:predicate:reverse">
+                    <td>{{x.jenis}}</td>
+                    <td>{{x.nama}}</td>
+                    <td>{{x.stokmin}}</td>
+                    <td>{{x.satuan}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+  </div>
+</div>
+</div>
+
+</div>

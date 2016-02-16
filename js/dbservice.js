@@ -58,7 +58,8 @@
             getPenyuplaiByParam: getPenyuplaiByParam,
             getATKByParam: getATKByParam,
             getJenisPemakai: getJenisPemakai,
-            getPemakaiByJenis: getPemakaiByJenis
+            getPemakaiByJenis: getPemakaiByJenis,
+            getStokMinimumBulan: getStokMinimumBulan
         };
 
         function getATK() {
@@ -490,6 +491,27 @@
           var deferred = $q.defer();
           var query = "SELECT nama FROM t_master_pemakai WHERE jenis = ? ORDER BY nama";
           connection.query(query, [jenis], function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function getStokMinimumBulan() {
+          var deferred = $q.defer();
+          var query = "SELECT jenis, nama, MAX(dailysum) AS stokmin, satuan FROM (SELECT jenis, nama, SUM(jumlah) AS dailysum, satuan FROM t_trans_pemakaian INNER JOIN t_master_atk ON t_trans_pemakaian.atk=t_master_atk.id WHERE MONTH(tanggal) = MONTH(CURRENT_DATE - INTERVAL 1 MONTH) GROUP BY DATE(tanggal), jenis, nama) AS T GROUP BY jenis, nama;"
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function getStokMinimumTahun() {
+          alert("dbservicestokmin");
+          var deferred = $q.defer();
+          var query = "SELECT jenis, nama, MAX(dailysum) AS stokmin, satuan FROM (SELECT jenis, nama, SUM(jumlah) AS dailysum, satuan FROM t_trans_pemakaian INNER JOIN t_master_atk ON t_trans_pemakaian.atk=t_master_atk.id WHERE YEAR(tanggal) = YEAR(CURRENT_DATE - INTERVAL 1 YEAR) GROUP BY DATE(tanggal), jenis, nama) AS T GROUP BY jenis, nama;"
+          connection.query(query, function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
           });
