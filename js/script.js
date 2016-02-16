@@ -36,8 +36,44 @@
            .when('/statpemakai', {
                templateUrl : 'statistik-per-pemakai.html',
                controller  : 'statistikPerPemakai'
+           })
+           .when('/stokminimum', {
+                templateUrl : 'stok-minimum.html',
+                controller  : 'stokMinimumController'
            });
+
    }]);
+
+atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', function($scope, dbService, $q) {
+  $scope.selected = 'bulan';
+  getStokMinimumBulan();
+
+  function getStokMinimumBulan() {
+    dbService.getStokMinimumBulan().then(function(response) {
+      $scope.stokminatk = response;
+      $scope.tabletitle = "Stok Minimum ATK Berdasarkan Pemakaian Bulan Lalu";
+    });
+  }
+
+  function getStokMinimumTahun() {
+    $scope.tabletitle = "Stok Minimum ATK Berdasarkan Pemakaian Tahun Lalu";
+    $scope.stokminatk = null;
+    dbService.getStokMinimumTahun().then(function(response) {
+      $scope.stokminatk = response;
+    });
+  }
+
+  $scope.selectPeriode = function() {
+    if ($scope.selected == 'bulan') {
+      getStokMinimumBulan();
+    } else {
+      getStokMinimumTahun();
+    }
+  }
+
+  $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
+  $('#sidebar-menu a[href="#stokminimum"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
+}]);
 
  atkatApp.controller('statistikPerPeriodeController', ['$scope', 'dbService', '$q', function($scope, dbService, $q) {
 
