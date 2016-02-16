@@ -15,9 +15,16 @@
 
         <div class="x_content">
           <div class="form-group">
-            <label for="nama-pemakai">Nama Pemakai</label>
-            <select id="nama-pemakai" class="form-control" ng-options="pemakai.nama as pemakai.nama for pemakai in namapemakai" ng-model="selectedpemakai" ng-change="pemakaiChanged()">
-            </select>
+            <div class="col-md-5">
+              <label for="jenis-pemakai">Jenis Pemakai</label>
+              <select id="jenis-pemakai" class="form-control" ng-options="pemakai.jenis as pemakai.jenis for pemakai in jenispemakai" ng-model="selectedjenis" ng-change="pemakaiChanged()">
+              </select>
+            </div>
+            <div class="col-md-5">
+              <label for="nama-pemakai">Nama Pemakai</label>
+              <select id="nama-pemakai" class="form-control" ng-options="pemakai.nama as pemakai.nama for pemakai in namapemakai" ng-model="selectedpemakai" ng-change="pemakaiChanged()">
+              </select>
+            </div>
           </div>
           <label ng-model="pesankesalahan"></label>
           <br><br>

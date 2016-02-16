@@ -56,7 +56,9 @@
             getStockATK: getStockATK,
             getStockAlreadyBooked: getStockAlreadyBooked,
             getPenyuplaiByParam: getPenyuplaiByParam,
-            getATKByParam: getATKByParam
+            getATKByParam: getATKByParam,
+            getJenisPemakai: getJenisPemakai,
+            getPemakaiByJenis: getPemakaiByJenis
         };
 
         function getATK() {
@@ -450,10 +452,44 @@
           return deferred.promise;
         }
 
-        function getStatistikPerPeriodePerPemakai(nama) {
+        function getStatistikPerPeriodePerPemakai(jenis, nama) {
           var deferred = $q.defer();
-          var query = "SELECT t_master_atk.jenis, (UNIX_TIMESTAMP(tanggal)*1000) as tanggal, jumlah, satuan FROM t_trans_pemakaian JOIN t_master_atk ON t_trans_pemakaian.atk = t_master_atk.id JOIN t_master_pemakai ON t_trans_pemakaian.pemakai = t_master_pemakai.id WHERE t_master_pemakai.nama = ? ORDER BY t_master_atk.jenis, tanggal;"
-          connection.query(query, [nama], function (err, rows) {
+          if (jenis === "Semua") {
+            var query = "SELECT t_master_atk.jenis, (UNIX_TIMESTAMP(tanggal)*1000) as tanggal, jumlah, satuan FROM t_trans_pemakaian JOIN t_master_atk ON t_trans_pemakaian.atk = t_master_atk.id JOIN t_master_pemakai ON t_trans_pemakaian.pemakai = t_master_pemakai.id ORDER BY t_master_atk.jenis, tanggal;"
+            connection.query(query, function (err, rows) {
+               if (err) deferred.reject(err);
+               deferred.resolve(rows);
+            });
+          } else if (nama === "Semua") {
+            var query = "SELECT t_master_atk.jenis, (UNIX_TIMESTAMP(tanggal)*1000) as tanggal, jumlah, satuan FROM t_trans_pemakaian JOIN t_master_atk ON t_trans_pemakaian.atk = t_master_atk.id JOIN t_master_pemakai ON t_trans_pemakaian.pemakai = t_master_pemakai.id WHERE t_master_pemakai.jenis = ? ORDER BY t_master_atk.jenis, tanggal;"
+            connection.query(query, [jenis], function (err, rows) {
+               if (err) deferred.reject(err);
+               deferred.resolve(rows);
+            });
+          } else {
+            var query = "SELECT t_master_atk.jenis, (UNIX_TIMESTAMP(tanggal)*1000) as tanggal, jumlah, satuan FROM t_trans_pemakaian JOIN t_master_atk ON t_trans_pemakaian.atk = t_master_atk.id JOIN t_master_pemakai ON t_trans_pemakaian.pemakai = t_master_pemakai.id WHERE t_master_pemakai.jenis = ? AND t_master_pemakai.nama = ? ORDER BY t_master_atk.jenis, tanggal;"
+            connection.query(query, [jenis, nama], function (err, rows) {
+               if (err) deferred.reject(err);
+               deferred.resolve(rows);
+            });
+          }
+          return deferred.promise;
+        }
+
+        function getJenisPemakai() {
+          var deferred = $q.defer();
+          var query = "SELECT DISTINCT jenis FROM t_master_pemakai"
+          connection.query(query, function (err, rows) {
+             if (err) deferred.reject(err);
+             deferred.resolve(rows);
+          });
+          return deferred.promise;
+        }
+
+        function getPemakaiByJenis(jenis) {
+          var deferred = $q.defer();
+          var query = "SELECT nama FROM t_master_pemakai WHERE jenis = ? ORDER BY nama";
+          connection.query(query, [jenis], function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);
           });
