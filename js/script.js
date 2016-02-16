@@ -76,116 +76,158 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
 }]);
 
  atkatApp.controller('statistikPerPeriodeController', ['$scope', 'dbService', '$q', function($scope, dbService, $q) {
+   var drawHighcharts = function(data, arrayJenis) {
+     var Highcharts = require('highcharts/highstock');
+     require('highcharts/modules/exporting')(Highcharts);
 
-    dbService.getStatistikPerPeriode().then(function(dataStatistik) {
-      var len = dataStatistik.length;
-      var i, j = -1, lastJenis = "";
-      var data = []; // array of series
-      var arrayJenis = [];
-      for (i = 0; i < len; i++) {
-        if (lastJenis === dataStatistik[i]["jenis"]) {
-          data[j]["data"].push([dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]);
-        } else {
-          lastJenis = dataStatistik[i]["jenis"];
-          arrayJenis.push(dataStatistik[i]["jenis"]);
-          var newData = {
-            "name"  : dataStatistik[i]["jenis"],
-            "data"  : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]]
-          } //object
-          data.push(newData);
-          j++;
-        }
-      }
+     // Create the chart
+     Highcharts.StockChart('container', {
+       chart: {
+         events: {
+           load: function() {
+             type: 'line'
+           }
+         }
+       },
+       legend: {
+           enabled: true,
+           align: 'right',
+           backgroundColor: '#FCFFC5',
+           borderColor: 'black',
+           borderWidth: 2,
+           layout: 'vertical',
+           verticalAlign: 'top',
+           y: 100,
+           shadow: true
+       },
+       rangeSelector : {
+         allButtonsEnabled: true,
+         buttons: [{
+             type: 'month',
+             count: 3,
+             text: 'Hari',
+             dataGrouping: {
+                 forced: true,
+                 units: [['day', [1]]]
+             }
+         }, {
+             type: 'year',
+             count: 1,
+             text: 'Minggu',
+             dataGrouping: {
+                 forced: true,
+                 units: [['week', [1]]]
+             }
+         }, {
+             type: 'all',
+             text: 'Bulan',
+             dataGrouping: {
+                 forced: true,
+                 units: [['month', [1]]]
+             }
+         }, {
+             type: 'year',
+             text: 'Tahun',
+             dataGrouping: {
+                 forced: true,
+                 units: [['year', [1]]]
+             }
+         }, {
+             type: 'all',
+             text: 'Semua',
+             dataGrouping: {
+                 forced: true,
+                 units: [['all', [1]]]
+             }
+         }],
 
-      console.log(data);
+         buttonTheme: {
+             width: 60
+         },
+         selected: 0
+       },
+       title: {
+           text: 'Statistik ATK per Periode'
+       },
+       subtitle: {
+         text: 'Data statistik ATK dengan rincian per periode'
+       },
+       series: data,
+       xAxis: {
+         categories: arrayJenis
+       },
+       yAxis: {
+         title: {
+             categories: 'Fruit eaten'
+           }
+       },
+     });
+   }
 
-      var Highcharts = require('highcharts/highstock');
-      require('highcharts/modules/exporting')(Highcharts);
+   var drawStatistikATK = function() {
+     if ($scope.selectedjenisbarang === "Semua") {
+       dbService.getStatistikPerPeriode().then(function(dataStatistik) {
+         var len = dataStatistik.length;
+         var i, j = -1, lastJenis = "";
+         var data = []; // array of series
+         var arrayJenis = [];
+         for (i = 0; i < len; i++) {
+           if (lastJenis === dataStatistik[i]["jenis"]) {
+             data[j]["data"].push([dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]);
+           } else {
+             lastJenis = dataStatistik[i]["jenis"];
+             arrayJenis.push(dataStatistik[i]["jenis"]);
+             var newData = {
+               "name"  : dataStatistik[i]["jenis"],
+               "data"  : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]]
+             } //object
+             data.push(newData);
+             j++;
+           }
+         }
+         drawHighcharts(data, arrayJenis);
+       });
+     } else {
+       dbService.getStatistikPerPeriodeByJenisATK($scope.selectedjenisbarang).then(function(dataStatistik) {
+         var len = dataStatistik.length;
+         var i, j = -1, lastnama = "";
+         var data = []; // array of series
+         var arraynama = [];
+         for (i = 0; i < len; i++) {
+           if (lastnama === dataStatistik[i]["nama"]) {
+             data[j]["data"].push([dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]);
+           } else {
+             lastnama = dataStatistik[i]["nama"];
+             arraynama.push(dataStatistik[i]["nama"]);
+             var newData = {
+               "name"  : dataStatistik[i]["nama"],
+               "data"  : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]]
+             } //object
+             data.push(newData);
+             j++;
+           }
+         }
+         if (len==0) {
+            alert("Tidak ada data pemakaian untuk jenis barang" + $scope.selectedjenis);
+         }
+         drawHighcharts(data, arraynama);
+       });
+     }
+   }
 
-      // Create the chart
-      Highcharts.StockChart('container', {
-        chart: {
-          events: {
-            load: function() {
-              type: 'line'
-            }
-          }
-        },
-        legend: {
-            enabled: true,
-            align: 'right',
-            backgroundColor: '#FCFFC5',
-            borderColor: 'black',
-            borderWidth: 2,
-            layout: 'vertical',
-            verticalAlign: 'top',
-            y: 100,
-            shadow: true
-        },
-        rangeSelector : {
-          allButtonsEnabled: true,
-          buttons: [{
-              type: 'month',
-              count: 3,
-              text: 'Hari',
-              dataGrouping: {
-                  forced: true,
-                  units: [['day', [1]]]
-              }
-          }, {
-              type: 'year',
-              count: 1,
-              text: 'Minggu',
-              dataGrouping: {
-                  forced: true,
-                  units: [['week', [1]]]
-              }
-          }, {
-              type: 'all',
-              text: 'Bulan',
-              dataGrouping: {
-                  forced: true,
-                  units: [['month', [1]]]
-              }
-          }, {
-              type: 'year',
-              text: 'Tahun',
-              dataGrouping: {
-                  forced: true,
-                  units: [['year', [1]]]
-              }
-          }, {
-              type: 'all',
-              text: 'Semua',
-              dataGrouping: {
-                  forced: true,
-                  units: [['all', [1]]]
-              }
-          }],
+   $scope.jenisChanged = function() {
+     drawStatistikATK();
+   }
 
-          buttonTheme: {
-              width: 60
-          },
-          selected: 0
-        },
-        title: {
-            text: 'Statistik ATK per Periode'
-        },
-        subtitle: {
-          text: 'Data statistik ATK dengan rincian per periode'
-        },
-        series: data,
-        xAxis: {
-          categories: arrayJenis
-        },
-        yAxis: {
-          title: {
-              categories: 'Fruit eaten'
-            }
-        },
-      });
-
+    dbService.getAllJenisATK().then(function(response) {
+      var arrinit = [{"nama" : "Semua", "jenis" : "Semua"}];
+      var jenisarr = arrinit.concat(response);
+      $scope.jenisbarang = jenisarr;
+      $scope.selectedjenisbarang = jenisarr[0]["jenis"];
+      drawStatistikATK();
     });
+
+
  }]);
 
  atkatApp.controller('statistikPerPemakai', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
@@ -300,16 +342,7 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
                 text: judulstatistik
             },
             series: data,
-            xAxis: {
-              categories: arrayJenis
-            },
-            yAxis: {
-              title: {
-                  categories: 'Fruit eaten'
-                }
-            },
           });
-       
      });
    }
 
@@ -339,118 +372,6 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
          });
          drawTable();
        });
-
-       /*
-       dbService.getStatistikPerPeriodePerPemakai($scope.selectedpemakai).then(function(dataStatistik) {
-         var len = dataStatistik.length;
-         var i, j = -1, lastJenis = "";
-         var data = []; // array of series
-         var arrayJenis = [];
-         for (i = 0; i < len; i++) {
-           if (lastJenis === dataStatistik[i]["jenis"]) {
-             data[j]["data"].push([dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]);
-           } else {
-             lastJenis = dataStatistik[i]["jenis"];
-             arrayJenis.push(dataStatistik[i]["jenis"]);
-             var newData = {
-               "name"  : dataStatistik[i]["jenis"],
-               "data"  : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]]
-             } //object
-             data.push(newData);
-             j++;
-           }
-         }
-
-         if (len==0) { //No data
-          alert("Tidak ada data pemakaian untuk " + $scope.selectedpemakai);
-         } else { //Highcharts beraksi
-            var Highcharts = require('highcharts/highstock');
-            require('highcharts/modules/exporting')(Highcharts);
-
-            // Create the chart
-            Highcharts.StockChart('container', {
-              chart: {
-                events: {
-                  load: function() {
-                    type: 'line'
-                  }
-                }
-              },
-              legend: {
-                  enabled: true,
-                  align: 'right',
-                  backgroundColor: '#FCFFC5',
-                  borderColor: 'black',
-                  borderWidth: 2,
-                  layout: 'vertical',
-                  verticalAlign: 'top',
-                  y: 100,
-                  shadow: true
-              },
-              rangeSelector : {
-                allButtonsEnabled: true,
-                buttons: [{
-                    type: 'month',
-                    count: 3,
-                    text: 'Hari',
-                    dataGrouping: {
-                        forced: true,
-                        units: [['day', [1]]]
-                    }
-                }, {
-                    type: 'year',
-                    count: 1,
-                    text: 'Minggu',
-                    dataGrouping: {
-                        forced: true,
-                        units: [['week', [1]]]
-                    }
-                }, {
-                    type: 'all',
-                    text: 'Bulan',
-                    dataGrouping: {
-                        forced: true,
-                        units: [['month', [1]]]
-                    }
-                }, {
-                    type: 'year',
-                    text: 'Tahun',
-                    dataGrouping: {
-                        forced: true,
-                        units: [['year', [1]]]
-                    }
-                }, {
-                    type: 'all',
-                    text: 'Semua',
-                    dataGrouping: {
-                        forced: true,
-                        units: [['all', [1]]]
-                    }
-                }],
-
-                buttonTheme: {
-                    width: 60
-                },
-                selected: 0
-              },
-              title: {
-                  text: 'Statistik ATK per Periode oleh ' + $scope.selectedpemakai
-              },
-              subtitle: {
-                text: 'Data statistik dari salah satu pemakai bernama ' + $scope.selectedpemakai + ' ATK dengan rincian per periode'
-              },
-              series: data,
-              xAxis: {
-                categories: arrayJenis
-              },
-              yAxis: {
-                title: {
-                    categories: 'Fruit eaten'
-                  }
-              },
-            });
-         }
-       });*/
      }
  }]);
 
