@@ -18,19 +18,17 @@
 
     <!-- Custom styling plus plugins -->
     <link href="css/custom.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="css/maps/jquery-jvectormap-2.0.1.css" />
+    <!-- <link rel="stylesheet" type="text/css" href="css/maps/jquery-jvectormap-2.0.1.css" />
     <link href="css/icheck/flat/green.css" rel="stylesheet" />
-    <link href="css/floatexamples.css" rel="stylesheet" type="text/css" />
+    <link href="css/floatexamples.css" rel="stylesheet" type="text/css" /> -->
+    <link rel="stylesheet" type="text/css" href="js/datetimepicker-master/jquery.datetimepicker.css"/ >
 
     <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
-    <script src="js/nprogress.js"></script>
+    <!-- <script src="js/nprogress.js"></script>
     <script>
         NProgress.start();
-    </script>
-    <script src="js/angular.min.js"></script>
-    <script src="js/angular-route.min.js"></script>
-    <script src="js/script.js"></script>
-    <script src="js/dbservice.js"></script>
+    </script> -->
+
 
     <!--[if lt IE 9]>
         <script src="../assets/js/ie8-responsive-file-warning.js"></script>
@@ -126,16 +124,26 @@
         </div>
 
     </div>
+
+    <script src="js/angular.min.js"></script>
+    <script src="js/angular-route.min.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/dbservice.js"></script>
+    <script src="node_modules/highcharts-ng/dist/highcharts-ng.js"></script>
+    <script src="js/datetimepicker-master/build/jquery.datetimepicker.full.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
-
-
     <script src="js/custom.js"></script>
-
-    <script>
-        NProgress.done();
+    <script type="text/javascript">
+      $.datetimepicker.setLocale('id');
     </script>
 
-    <script src="node_modules/highcharts-ng/dist/highcharts-ng.js"></script>
+
+        <script type="text/javascript">
+        $(document).ready(function () {
+              $("body").tooltip({ selector: '[data-toggle="tooltip"]' });
+        });
+       </script>
+
 </body>
 
 </html>
