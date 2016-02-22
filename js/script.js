@@ -89,6 +89,13 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
            }
          }
        },
+       exporting: {
+            buttons: {
+                contextButton: {
+                    symbol: 'circle'
+                }
+            }
+        },
        legend: {
            enabled: true,
            align: 'right',
@@ -178,8 +185,21 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
              lastJenis = dataStatistik[i]["jenis"];
              arrayJenis.push(dataStatistik[i]["jenis"]);
              var newData = {
-               "name"  : dataStatistik[i]["jenis"],
-               "data"  : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]]
+               "type"         : 'column',
+               "name"         : dataStatistik[i]["jenis"],
+               "data"         : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]],
+               "dataGrouping" : {
+                                    units: [[
+                                        'week', // unit name
+                                        [1] // allowed multiples
+                                    ], [
+                                        'month',
+                                        [1, 2, 3, 4, 6]
+                                    ], [
+                                        'year',
+                                        null
+                                    ]]
+                                }
              } //object
              data.push(newData);
              j++;
@@ -200,15 +220,28 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
              lastnama = dataStatistik[i]["nama"];
              arraynama.push(dataStatistik[i]["nama"]);
              var newData = {
-               "name"  : dataStatistik[i]["nama"],
-               "data"  : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]]
+               "type"         : 'column',
+               "name"         : dataStatistik[i]["nama"],
+               "data"         : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]],
+               "dataGrouping" : {
+                                    units: [[
+                                        'week', // unit name
+                                        [1] // allowed multiples
+                                    ], [
+                                        'month',
+                                        [1, 2, 3, 4, 6]
+                                    ], [
+                                        'year',
+                                        null
+                                    ]]
+                                }
              } //object
              data.push(newData);
              j++;
            }
          }
          if (len==0) {
-            alert("Tidak ada data pemakaian untuk jenis barang" + $scope.selectedjenis);
+            alert("Tidak ada data pemakaian untuk jenis barang " + $scope.selectedjenisbarang);
          }
          drawHighcharts(data, arraynama);
        });
@@ -244,8 +277,21 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
            lastJenis = dataStatistik[i]["jenis"];
            arrayJenis.push(dataStatistik[i]["jenis"]);
            var newData = {
-             "name"  : dataStatistik[i]["jenis"],
-             "data"  : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]]
+             "type"         : 'column',
+             "name"         : dataStatistik[i]["jenis"],
+             "data"         : [[dataStatistik[i]["tanggal"], dataStatistik[i]["jumlah"]]],
+             "dataGrouping" : {
+                                  units: [[
+                                      'week', // unit name
+                                      [1] // allowed multiples
+                                  ], [
+                                      'month',
+                                      [1, 2, 3, 4, 6]
+                                  ], [
+                                      'year',
+                                      null
+                                  ]]
+                              }
            } //object
            data.push(newData);
            j++;
