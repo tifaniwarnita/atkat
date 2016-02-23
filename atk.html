@@ -80,24 +80,28 @@
         <form role="form" name="newATKForm">
           <div class="form-group">
             <label for="jenis-barang">Jenis Barang</label>
-            <input type="text" class="form-control" id="jenis-barang" ng-model="newatk.jenis" required>
+            <input type="text" class="form-control" id="jenis-barang" ng-model="newatk.jenis" name="newatk_jenis" required>
+            <div style="color:red" ng-show="newATKForm.newatk_jenis.$touched && newATKForm.newatk_jenis.$invalid">Harap mengisi jenis barang</div>
           </div>
           <div class="form-group">
             <label for="nama-barang">Nama Barang</label>
-            <input type="text" class="form-control" id="nama-barang" ng-model="newatk.nama" required>
+            <input type="text" class="form-control" id="nama-barang" ng-model="newatk.nama" name="newatk_nama" required>
+            <div style="color:red" ng-show="newATKForm.newatk_nama.$touched && newATKForm.newatk_nama.$invalid">Harap mengisi nama barang</div>
           </div>
           <div class="form-group">
             <label for="stok-barang">Stok Barang</label>
-            <input type="number" min="0" class="form-control" id="stok-barang" ng-model="newatk.stok" required>
+            <input type="number" min="0" class="form-control" id="stok-barang" ng-model="newatk.stok" name="newatk_stok" value="0" required>
+            <div style="color:red" ng-show="newATKForm.newatk_stok.$touched && newATKForm.newatk_stok.$invalid">Harap masukkan angka >= 0</div>
           </div>
           <div class="form-group">
             <label for="satuan-barang">Satuan Barang</label>
-            <input type="text" class="form-control" id="satuan-barang" ng-model="newatk.satuan" required>
+            <input type="text" class="form-control" id="satuan-barang" ng-model="newatk.satuan" name="newatk_satuan" required>
+            <div style="color:red" ng-show="newATKForm.newatk_satuan.$touched && newATKForm.newatk_satuan.$invalid">Harap mengisi satuan barang</div>
           </div>
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
-        <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="newATKForm.$invalid" ng-click="createATK(newatk)"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
+        <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-click="createATK(newatk)" ng-disabled="newATKForm.$invalid"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
       </div>
     </form>
       </div>
@@ -116,19 +120,23 @@
           <form role="form" name="editATKForm">
             <div class="form-group">
               <label for="jenis-barang">Jenis Barang</label>
-              <input type="text" class="form-control" id="jenis-barang" ng-model="editatk.jenis" required>
+              <input type="text" class="form-control" id="jenis-barang" ng-model="editatk.jenis" name="editatk_jenis" required>
+              <div style="color:red" ng-show="editATKForm.editatk_jenis.$touched && editATKForm.editatk_jenis.$invalid">Harap mengisi jenis barang</div>
             </div>
             <div class="form-group">
               <label for="nama-barang">Nama Barang</label>
-              <input type="text" class="form-control" id="nama-barang" ng-model="editatk.nama" required>
+              <input type="text" class="form-control" id="nama-barang" ng-model="editatk.nama" name="editatk_nama" required>
+              <div style="color:red" ng-show="editATKForm.editatk_nama.$touched && editATKForm.editatk_nama.$invalid">Harap mengisi nama barang</div>
             </div>
             <div class="form-group">
               <label for="stok-barang">Stok Barang</label>
-              <input type="number" min="0" class="form-control" id="stok-barang" ng-model="editatk.stok" required>
+              <input type="number" min="0" class="form-control" id="stok-barang" ng-model="editatk.stok" name="editatk_stok" required>
+              <div style="color:red" ng-show="editATKForm.editatk_stok.$touched && editATKForm.editatk_stok.$invalid">Harap masukkan angka >=0</div>
             </div>
             <div class="form-group">
               <label for="satuan-barang">Satuan Barang</label>
-              <input type="text" class="form-control" id="satuan-barang" ng-model="editatk.satuan" required>
+              <input type="text" class="form-control" id="satuan-barang" ng-model="editatk.satuan" name="editatk_satuan" required>
+              <div style="color:red" ng-show="editATKForm.editatk_satuan.$touched && editATKForm.editatk_satuan.$invalid">Harap mengisi satuan barang</div>
             </div>
         </div>
         <div class="modal-footer">
