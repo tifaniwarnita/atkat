@@ -69,7 +69,8 @@
             <form role="form" name="newBookingForm">
               <div class="form-group">
                 <label for="nim-nip">NIM/NIP</label>
-                <input type="text" class="form-control" id="id-pemakai" ng-model="newbooking.pemakai" required>
+                <input type="text" class="form-control" id="id-pemakai" ng-model="newbooking.pemakai" name="newbooking_pemakai" required>
+                <div style="color:red" ng-show="newBookingForm.newbooking_pemakai.$touched && newBookingForm.newbooking_pemakai.$invalid">Harap mengisi ID pemakai</div>
               </div>
               <div class="form-group">
                 <label for="jenis-barang">Jenis Barang</label>
@@ -83,7 +84,8 @@
               </div>
               <div class="form-group">
                 <label for="jumlah-barang">Jumlah</label>
-                <input type="number" min="1" class="form-control" id="jumlah-barang" ng-model="newbooking.jumlah" required>
+                <input type="number" min="1" class="form-control" id="jumlah-barang" ng-model="newbooking.jumlah" name="newbooking_jumlah" required>
+                <div style="color:red" ng-show="newBookingForm.newbooking_jumlah.$dirty && newBookingForm.newbooking_jumlah.$invalid">Harap masukkan angka >= 1</div>
               </div>
               <div class="form-group">
                 <label>Tanggal Pakai</label>
@@ -112,7 +114,8 @@
             <form role="form" name="editBookingForm">
               <div class="form-group">
                 <label for="nim-nip">NIM/NIP</label>
-                <input type="text" class="form-control" ng-model="editbooking.pemakai" required>
+                <input type="text" class="form-control" ng-model="editbooking.pemakai" nama="editbooking_pemakai" required>
+                <div style="color:red" ng-show="editBookingForm.editbooking_pemakai.$touched && editBookingForm.editbooking_pemakai.$invalid">Harap mengisi ID pemakai</div>
               </div>
               <div class="form-group">
                 <label for="jenis-barang">Jenis Barang</label>
@@ -127,6 +130,7 @@
               <div class="form-group">
                 <label for="jumlah-barang">Jumlah</label>
                 <input type="number" min="1" class="form-control" id="jumlah-barang" ng-model="editbooking.jumlah" required>
+                <div style="color:red" ng-show="editBookingForm.editbooking_jumlah.$dirty && editBookingForm.editbooking_jumlah.$invalid">Harap masukkan angka >= 1</div>
               </div>
               <div class="form-group">
                 <label>Tanggal Pakai</label>

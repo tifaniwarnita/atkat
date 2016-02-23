@@ -10,7 +10,7 @@
         </div>
     </div>
 
-  
+
         <div class="clearfix"></div>
         <div class="row">
         <div class="col-md-12 col-sm-12 col-xs-12">
@@ -63,11 +63,13 @@
             <form role="form" name="newPemakaiForm">
               <div class="form-group">
                 <label for="id-pemakai">ID Pemakai</label>
-                <input type="text" class="form-control" id="id-pemakai" ng-model="newpemakai.id" required>
+                <input type="text" class="form-control" id="id-pemakai" ng-model="newpemakai.id" name="newpemakai_id" required>
+                <div style="color:red" ng-show="newPemakaiForm.newpemakai_id.$touched && newPemakaiForm.newpemakai_id.$invalid">Harap mengisi ID pemakai</div>
               </div>
               <div class="form-group">
                 <label for="nama-pemakai">Nama Pemakai</label>
-                <input type="text" class="form-control" id="nama-pemakai" ng-model="newpemakai.nama" required>
+                <input type="text" class="form-control" id="nama-pemakai" ng-model="newpemakai.nama" name="newpemakai_nama" required>
+                <div style="color:red" ng-show="newPemakaiForm.newpemakai_nama.$touched && newPemakaiForm.newpemakai_nama.$invalid">Harap mengisi nama pemakai</div>
               </div>
               <div class="form-group">
                 <label for="kategori-pemakai">Kategori Pemakai</label> <br>
@@ -98,11 +100,13 @@
             <form role="form" name="editPemakaiForm">
               <div class="form-group">
                 <label for="jenis-barang">ID Pemakai</label>
-                <input type="text" class="form-control" id="id-pemakai" ng-model="editpemakai.id" required>
+                <input type="text" class="form-control" id="id-pemakai" ng-model="editpemakai.id" name="editpemakai_id" required>
+                <div style="color:red" ng-show="editPemakaiForm.editpemakai_id.$touched && editPemakaiForm.editpemakai_id.$invalid">Harap mengisi ID pemakai</div>
               </div>
               <div class="form-group">
                 <label for="jenis-barang">Nama Pemakai</label>
-                <input type="text" class="form-control" id="nama-pemakai" ng-model="editpemakai.nama" required>
+                <input type="text" class="form-control" id="nama-pemakai" ng-model="editpemakai.nama" name="editpemakai_nama" required>
+                <div style="color:red" ng-show="editPemakaiForm.editpemakai_nama.$touched && editPemakaiForm.editpemakai_nama.$invalid">Harap mengisi nama pemakai</div>
               </div>
               <div class="form-group">
                 <label for="kategori-pemakai">Kategori Pemakai</label> <br>

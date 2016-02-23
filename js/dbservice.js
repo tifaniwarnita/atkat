@@ -366,7 +366,7 @@
 
         function getPengadaanByID(id) {
           var deferred = $q.defer();
-          var query = "SELECT t_trans_pengadaan.id AS id, DATE_FORMAT(tanggal_datang, '%Y/%m/%d %H:%i') AS tanggal_datang, DATE_FORMAT(tanggal_datang,'%Y/%m/%d') AS datedatang, DATE_FORMAT(tanggal_datang,'%H:%i') AS timedatang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai WHERE t_trans_pengadaan.id=?";
+          var query = "SELECT t_trans_pengadaan.id AS id, DATE_FORMAT(tanggal_pesan, '%Y/%m/%d') as datepesan, DATE_FORMAT(tanggal_datang, '%Y/%m/%d %H:%i') AS tanggal_datang, DATE_FORMAT(tanggal_datang,'%Y/%m/%d') AS datedatang, DATE_FORMAT(tanggal_datang,'%H:%i') AS timedatang, t_master_penyuplai.nama AS nama_penyuplai, t_master_atk.jenis AS jenis, t_master_atk.nama AS nama, jumlah, satuan FROM t_trans_pengadaan INNER JOIN t_master_atk ON t_master_atk.id=t_trans_pengadaan.atk INNER JOIN t_master_penyuplai ON t_master_penyuplai.id = t_trans_pengadaan.penyuplai WHERE t_trans_pengadaan.id=?";
           connection.query(query, [id], function (err, rows) {
              if (err) deferred.reject(err);
              deferred.resolve(rows);

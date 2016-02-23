@@ -91,7 +91,7 @@
           <div class="form-group">
             <label for="stok-barang">Stok Barang</label>
             <input type="number" min="0" class="form-control" id="stok-barang" ng-model="newatk.stok" name="newatk_stok" value="0" required>
-            <div style="color:red" ng-show="newATKForm.newatk_stok.$touched && newATKForm.newatk_stok.$invalid">Harap masukkan angka >= 0</div>
+            <div style="color:red" ng-show="newATKForm.newatk_stok.$dirty && newATKForm.newatk_stok.$invalid">Harap masukkan angka >= 0</div>
           </div>
           <div class="form-group">
             <label for="satuan-barang">Satuan Barang</label>
@@ -131,7 +131,7 @@
             <div class="form-group">
               <label for="stok-barang">Stok Barang</label>
               <input type="number" min="0" class="form-control" id="stok-barang" ng-model="editatk.stok" name="editatk_stok" required>
-              <div style="color:red" ng-show="editATKForm.editatk_stok.$touched && editATKForm.editatk_stok.$invalid">Harap masukkan angka >=0</div>
+              <div style="color:red" ng-show="editATKForm.editatk_stok.$dirty && editATKForm.editatk_stok.$invalid">Harap masukkan angka >=0</div>
             </div>
             <div class="form-group">
               <label for="satuan-barang">Satuan Barang</label>

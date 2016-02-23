@@ -260,7 +260,8 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
       drawStatistikATK();
     });
 
-
+    $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
+    $('#sidebar-menu a[href="#statperiode"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
  }]);
 
  atkatApp.controller('statistikPerPemakai', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
@@ -419,6 +420,9 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
          drawTable();
        });
      }
+
+     $('#sidebar-menu a').parent('li').removeClass('current-page').parent('ul').parent().removeClass('active');
+     $('#sidebar-menu a[href="#statpemakai"]').parent('li').addClass('current-page').parent('ul').parent().addClass('active');
  }]);
 
  atkatApp.controller('atkController', ['$scope', 'dbService','$q', function($scope, dbService, $q) {
@@ -727,6 +731,7 @@ atkatApp.controller('pemakaianController', ['$scope', 'dbService','$q', function
     getAllBooking();
     getAllJenis();
     $('#tanggal_pakai_picker').datetimepicker({
+      minDate: '+1970/01/02',
     });
 
     function getAllBooking() {
@@ -850,6 +855,7 @@ atkatApp.controller('pengadaanController', ['$scope', 'dbService','$q', function
         jumlah_awal = $scope.editpengadaan.jumlah;
         if ($scope.editpengadaan.tanggal_datang !== null) {
         $('#tanggal_datang_edit').datetimepicker({
+            minDate: $scope.editpengadaan.datepesan,
             defaultDate: $scope.editpengadaan.datedatang,
             defaultTime: $scope.editpengadaan.timedatang,
         });
