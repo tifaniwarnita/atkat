@@ -92,7 +92,7 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
        exporting: {
             buttons: {
                 contextButton: {
-                    symbol: 'circle'
+                    symbol: 'url(download-button.png)'
                 }
             }
         },
@@ -167,7 +167,7 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
          title: {
              categories: 'Fruit eaten'
            }
-       },
+       }
      });
    }
 
@@ -339,6 +339,13 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
                 y: 100,
                 shadow: true
             },
+            exporting: {
+                 buttons: {
+                     contextButton: {
+                         symbol: 'url(download-button.png)'
+                     }
+                 }
+             },
             rangeSelector : {
               allButtonsEnabled: true,
               buttons: [{
