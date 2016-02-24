@@ -419,17 +419,17 @@
           var query = "SELECT SUM(jumlah) FROM t_trans_booking WHERE CURDATE() = DATE(tanggal_pakai) AND tanggal_pakai >= now()";
           connection.query(query, function(err, rows){
             if(err) deferred.reject(err);
-            deferred.resolve(err);
+            deferred.resolve(rows);
             });
           return deferred.promise;
         }
 
         function getPenyuplaiByParam(nama, kontak, alamat){
           var deferred = $q.defer();
-          var query = "SELECT * FROM t_master_penyuplai WHERE nama = ? AND kontak = ? AND alamat = ?";
+          var query = 'SELECT * FROM t_master_penyuplai WHERE nama = ? AND kontak = ? AND alamat = ?';
           connection.query(query, [nama, kontak, alamat], function(err, rows){
             if(err) deferred.reject(err);
-            deferred.resolve(err);
+            deferred.resolve(rows);
           });
           return deferred.promise;
         }
@@ -437,9 +437,9 @@
         function getATKByParam(jenis, nama){
           var deferred = $q.defer();
           var query = "SELECT * FROM t_master_atk WHERE jenis = ? AND nama = ?";
-          connection.query(query, [jenis, nama_penyuplai], function(err, rows){
+          connection.query(query, [jenis, nama], function(err, rows){
             if(err) deferred.reject(err)
-              deferred.resolve(err);
+              deferred.resolve(rows);
           });
           return deferred.promise;
         }

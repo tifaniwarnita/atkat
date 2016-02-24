@@ -453,10 +453,12 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
     }
 
     function validasiATK(jenis, nama){
+      var deferred = $q.defer();
+
       var jenisATK, namaATK;
-      dbService.getgetATKByParam(jenis, nama).then(function(response){
+      return dbService.getgetATKByParam(jenis, nama).then(function(response){
         jenisATK = response[0].jenis;
-        namaATK - response[0].nama;
+        namaATK = response[0].nama;
 
         if(jenisATK == jenis && namaATK == nama){
           return true;
@@ -572,26 +574,35 @@ atkatApp.controller('stokMinimumController', ['$scope', 'dbService', '$q', funct
     }
 
     function validasiPenyuplai(nama, kontak, alamat){
-      var namaPenyuplai, kontakPenyuplai, alamatPenyuplai;
-      dbService.getPenyuplaiByParam(nama, kontak, alamat).then(function(response){
-        namaPenyuplai = reponse[0].nama;
-        kontakPenyuplai = response[0].kontak;
-        alamatPenyuplai = response[0].alamat;
+      var deferred = $q.defer();
 
-        if(namaPenyuplai == nama && kontakPenyuplai == kontak && alamatPenyuplai == alamat){
-          return true;
+      return dbService.getPenyuplaiByParam(nama, kontak, alamat).then(function(response){
+        if(response!=""){ //Tidak ada di database
+            deferred.resolve(false);
+            return deferred.promise;
         }
-        else
-          return false;
+        else{
+          deferred.resolve(true);
+          return deferred.promise;
+        }
+      }, function(response){
+        deferred.reject(false);
+        return deferred.promise;
       });
     }
 
     $scope.createPenyuplai = function (newpenyuplai) {
-      //if(!validasiPenyuplai(newpenyuplai.nama, newpenyuplai.kontak, newpenyuplai.alamat)){
-        dbService.insertPenyuplai(newpenyuplai).then(function (response) {
-          alert("Data penyuplai baru berhasil ditambahkan");
-          getAllPenyuplai();
-        });
+      validasiPenyuplai(newpenyuplai.nama, newpenyuplai.kontak, newpenyuplai.alamat).then(function(response){
+        if(response){
+          dbService.insertPenyuplai(newpenyuplai).then(function (response) {
+            alert("Data penyuplai baru berhasil ditambahkan");
+            getAllPenyuplai();
+          });
+        }
+        else{
+          alert("Penyuplai sudah tersimpan dalam database");
+        }
+      });
       /*}
       else{
         alert("Penyuplai sudah tersimpan dalam database");
