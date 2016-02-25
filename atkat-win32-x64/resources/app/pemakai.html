@@ -1,0 +1,127 @@
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Daftar Pemakai</h3>
+            </div>
+            <div class="title_right">
+                <button class="btn btn-default pull-right" data-toggle="modal" data-target="#tambahPemakai">+ Tambah Pemakai Baru</button>
+            </div>
+        </div>
+    </div>
+
+
+        <div class="clearfix"></div>
+        <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Cari pemakai..." ng-model="query">
+              <span class="input-group-btn">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+              </span>
+            </div>
+          </div>
+
+    <div class="x_content">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><a ng-click="order('id')">ID</a><span class="sortorder" ng-show="predicate === 'id'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('nama')">Nama</a><span class="sortorder" ng-show="predicate === 'nama'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('jenis')">Kategori</a><span class="sortorder" ng-show="predicate === 'jenis'" ng-class="{reverse:reverse}"></th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in pemakai | filter:query | orderBy:predicate:reverse">
+                    <th scope="row">{{x.id}}</th>
+                    <td>{{x.nama}}</td>
+                    <td>{{x.jenis}}</td>
+                    <td><a href="#pemakai" data-toggle="modal" data-target="#editPemakai" ng-click="getPemakaiByID(x.id)" ><i data-toggle="tooltip" title="Ubah data" class="fa fa-edit aksi"></i></a> | <a href="#pemakai" data-toggle="tooltip" title="Hapus pemakai" ng-click="deletePemakai(x.id)"><i class="fa fa-trash aksi"></i></a>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Modal Tambah Pemakai -->
+    <div class="modal fade" id="tambahPemakai" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4>Tambah Pemakai Baru</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" name="newPemakaiForm">
+              <div class="form-group">
+                <label for="id-pemakai">ID Pemakai</label>
+                <input type="text" class="form-control" id="id-pemakai" ng-model="newpemakai.id" name="newpemakai_id" required>
+                <div style="color:red" ng-show="newPemakaiForm.newpemakai_id.$touched && newPemakaiForm.newpemakai_id.$invalid">Harap mengisi ID pemakai</div>
+              </div>
+              <div class="form-group">
+                <label for="nama-pemakai">Nama Pemakai</label>
+                <input type="text" class="form-control" id="nama-pemakai" ng-model="newpemakai.nama" name="newpemakai_nama" required>
+                <div style="color:red" ng-show="newPemakaiForm.newpemakai_nama.$touched && newPemakaiForm.newpemakai_nama.$invalid">Harap mengisi nama pemakai</div>
+              </div>
+              <div class="form-group">
+                <label for="kategori-pemakai">Kategori Pemakai</label> <br>
+                <input type="radio" id="kategori-pemakai" ng-model="newpemakai.jenis" value="Mahasiswa" required> Mahasiswa
+                <input type="radio" id="kategori-pemakai" ng-model="newpemakai.jenis" value="Dosen" required> Dosen
+                <input type="radio" id="kategori-pemakai" ng-model="newpemakai.jenis" value="Pegawai" required> Pegawai
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
+            <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="newPemakaiForm.$invalid" ng-click="createPemakai(newpemakai)"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
+          </div>
+        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <!-- Modal Edit Pemakai -->
+  <div class="modal fade" id="editPemakai" role="dialog">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4>Ubah Data Pemakai</h4>
+        </div>
+        <div class="modal-body">
+            <form role="form" name="editPemakaiForm">
+              <div class="form-group">
+                <label for="jenis-barang">ID Pemakai</label>
+                <input type="text" class="form-control" id="id-pemakai" ng-model="editpemakai.id" name="editpemakai_id" required>
+                <div style="color:red" ng-show="editPemakaiForm.editpemakai_id.$touched && editPemakaiForm.editpemakai_id.$invalid">Harap mengisi ID pemakai</div>
+              </div>
+              <div class="form-group">
+                <label for="jenis-barang">Nama Pemakai</label>
+                <input type="text" class="form-control" id="nama-pemakai" ng-model="editpemakai.nama" name="editpemakai_nama" required>
+                <div style="color:red" ng-show="editPemakaiForm.editpemakai_nama.$touched && editPemakaiForm.editpemakai_nama.$invalid">Harap mengisi nama pemakai</div>
+              </div>
+              <div class="form-group">
+                <label for="kategori-pemakai">Kategori Pemakai</label> <br>
+                <input type="radio" id="kategori-pemakai" ng-model="editpemakai.jenis" value="Mahasiswa" required> Mahasiswa
+                <input type="radio" id="kategori-pemakai" ng-model="editpemakai.jenis" value="Dosen" required> Dosen
+                <input type="radio" id="kategori-pemakai" ng-model="editpemakai.jenis" value="Pegawai" required> Pegawai
+              </div>
+          </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
+          <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="editPemakaiForm.$invalid" ng-click="editPemakai()"><span class="glyphicon glyphicon-ok"></span> Ubah</button>
+        </div>
+      </form>
+        </div>
+      </div>
+    </div>
+</div>
+</div>

@@ -1,0 +1,130 @@
+<div class="right_col" role="main">
+    <div class="">
+        <div class="page-title">
+            <div class="title_left">
+                <h3>Daftar Penyuplai</h3>
+            </div>
+            <div class="title_right">
+                <button class="btn btn-default pull-right" data-toggle="modal" data-target="#tambahPenyuplai">+ Tambah Penyuplai Baru</button>
+            </div>
+        </div>
+      </div>
+
+        <div class="clearfix"></div>
+        <div class="row">
+        <div class="col-md-12 col-sm-12 col-xs-12">
+        <div class="x_panel">
+          <div class="top_search">
+            <div class="input-group">
+              <input type="text" class="form-control" placeholder="Cari penyuplai..." ng-model="query">
+              <span class="input-group-btn">
+                <button class="btn btn-default"><span class="glyphicon glyphicon-search"></span></button>
+              </span>
+            </div>
+          </div>
+
+    <div class="x_content">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th><a ng-click="order('nama')">Nama</a><span class="sortorder" ng-show="predicate === 'nama'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('kontak')">Kontak</a><span class="sortorder" ng-show="predicate === 'kontak'" ng-class="{reverse:reverse}"></th>
+                    <th><a ng-click="order('alamat')">Alamat</a><span class="sortorder" ng-show="predicate === 'alamat'" ng-class="{reverse:reverse}"></th>
+                    <th>Aksi</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="x in penyuplai | filter:query | orderBy:predicate:reverse">
+                    <td>{{x.nama}}</td>
+                    <td>{{x.kontak}}</td>
+                    <td>{{x.alamat}}</td>
+                    <td><a href="#penyuplai" data-toggle="modal" data-target="#editPenyuplai" ng-click="getPenyuplaiByID(x.id)"><i data-toggle="tooltip" title="Ubah data"class="fa fa-edit aksi"></i></a> | <a href="#penyuplai" data-toggle="tooltip" title="Hapus penyuplai" ng-click="deletePenyuplai(x.id)"><i class="fa fa-trash aksi"></i></a> | <a href="#pengadaan" data-toggle="tooltip" title="Tambah transaksi pengadaan"><i class="fa fa-shopping-cart"></i></a></td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+  </div>
+</div>
+</div>
+
+  <!-- Modal Tambah Penyuplai-->
+    <div class="modal fade" id="tambahPenyuplai" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4>Tambah Penyuplai Baru</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" name="newPenyuplaiForm">
+              <div class="form-group">
+                <label for="nama-penyuplai">Nama Penyuplai</label>
+                <input type="text" class="form-control" id="nama-penyuplai" ng-model="newpenyuplai.nama" name="newpenyuplai_nama" required>
+                <div style="color:red" ng-show="newPenyuplaiForm.newpenyuplai_nama.$touched && newPenyuplaiForm.newpenyuplai_nama.$invalid">Harap mengisi nama penyuplai</div>
+              </div>
+              <div class="form-group">
+                <label for="kontak-penyuplaig">No. Telp</label>
+                <input type="text" class="form-control" id="kontak-penyuplai" ng-model="newpenyuplai.kontak" name="newpenyuplai_kontak" required>
+                <div style="color:red" ng-show="newPenyuplaiForm.newpenyuplai_kontak.$touched && newPenyuplaiForm.newpenyuplai_kontak.$invalid">Harap mengisi no. telepon penyuplai</div>
+              </div>
+              <div class="form-group">
+                <label for="alamat-penyuplai">Alamat</label>
+                <input type="text" class="form-control" id="alamat-penyuplai" ng-model="newpenyuplai.alamat" name="newpenyuplai_alamat" required>
+                <div style="color:red" ng-show="newPenyuplaiForm.newpenyuplai_alamat.$touched && newPenyuplaiForm.newpenyuplai_alamat.$invalid">Harap mengisi alamat penyuplai</div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
+            <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="newPenyuplaiForm.$invalid" ng-click="createPenyuplai(newpenyuplai)"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
+          </div>
+        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal Edit Penyuplai-->
+    <div class="modal fade" id="editPenyuplai" role="dialog">
+    <div class="modal-dialog">
+
+      <!-- Modal content-->
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">&times;</button>
+            <h4>Edit Penyuplai Baru</h4>
+          </div>
+          <div class="modal-body">
+            <form role="form" name="editPenyuplaiForm">
+              <div class="form-group">
+                <label for="nama-penyuplaig">Nama Penyuplai</label>
+                <input type="text" class="form-control" id="nama-penyuplai" ng-model="editpenyuplai.nama" name="editpenyuplai_nama" required>
+                <div style="color:red" ng-show="editPenyuplaiForm.editpenyuplai_nama.$touched && editPenyuplaiForm.editpenyuplai_nama.$invalid">Harap mengisi nama penyuplai</div>
+              </div>
+              <div class="kontak-penyuplai">
+                <label for="jenis-barang">No. Telp</label>
+                <input type="text" class="form-control" id="kontak-penyuplai" ng-model="editpenyuplai.kontak" name="editpenyuplai_kontak" required>
+
+                <div style="color:red" ng-show="editPenyuplaiForm.editpenyuplai_kontak.$touched && editPenyuplaiForm.editpenyuplai_kontak.$invalid">Harap mengisi no. telepon penyuplai</div>
+              </div>
+              <div class="form-group">
+                <label for="alamat-penyuplai">Alamat</label>
+                <input type="text" class="form-control" id="alamat-penyuplai" ng-model="editpenyuplai.alamat" name="editpenyuplai_alamat" required>
+                <div style="color:red" ng-show="editPenyuplaiForm.editpenyuplai_alamat.$touched && editPenyuplaiForm.editpenyuplai_alamat.$invalid">Harap mengisi alamat penyuplai</div>
+              </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default btn-danger" data-dismiss="modal" style="margin-bottom: 0"><span class="glyphicon glyphicon-remove"></span> Batal</button>
+            <button type="submit" class="btn btn-default btn-success" data-dismiss="modal" ng-disabled="editPenyuplaiForm.$invalid" ng-click="editPenyuplai()"><span class="glyphicon glyphicon-ok"></span> Tambah</button>
+          </div>
+        </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+</div>
+</div>
